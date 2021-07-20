@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar dense flat>
+    <v-toolbar dense>
       <v-btn text small rounded class="text-none"> Abanicos </v-btn>
       <v-btn text small rounded class="text-none"> Ceremonia del Te </v-btn>
       <v-btn text small rounded class="text-none"> Colgantes & Llaveros </v-btn>

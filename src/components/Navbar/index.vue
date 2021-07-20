@@ -1,25 +1,27 @@
 <template>
   <div>
     <v-app-bar color="white">
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="kyomaru-logo.webp"
-          transition="scale-transition"
-          width="40"
-        />
+      <router-link to="/">
+        <div class="d-flex align-center">
+          <v-img
+            alt="Vuetify Logo"
+            class="shrink mr-2"
+            contain
+            src="kyomaru-logo.webp"
+            transition="scale-transition"
+            width="40"
+          />
 
-        <v-img
-          alt="Kyomaru Name"
-          class="shrink hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="kyomaru-name.webp"
-          width="120"
-        />
-      </div>
+          <v-img
+            alt="Kyomaru Name"
+            class="shrink hidden-sm-and-down"
+            contain
+            min-width="100"
+            src="kyomaru-name.webp"
+            width="120"
+          />
+        </div>
+      </router-link>
 
       <v-spacer></v-spacer>
       <v-btn icon>
