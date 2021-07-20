@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar color="white" dense flat>
+    <v-app-bar color="white">
       <div class="d-flex align-center">
         <v-img
           alt="Vuetify Logo"
@@ -12,7 +12,7 @@
         />
 
         <v-img
-          alt="Vuetify Name"
+          alt="Kyomaru Name"
           class="shrink hidden-sm-and-down"
           contain
           min-width="100"
@@ -34,8 +34,8 @@
 
       <v-divider vertical></v-divider>
 
-      <v-btn text small class="text-none"> Registrate </v-btn>
-      <v-btn text small class="text-none"> Iniciar Sesion </v-btn>
+      <v-btn text small rounded class="text-none"> Registrate </v-btn>
+      <v-btn text small rounded class="text-none"> Iniciar Sesion </v-btn>
     </v-app-bar>
   </div>
 </template>
