@@ -1,15 +1,25 @@
 <template>
-  <div>Home</div>
+  <div>
+    <Hero />
+    <Products />
+    <Categories />
+  </div>
 </template>
 
 <script>
-// import HelloWorld from "../components/HelloWorld";
+import Hero from '@/components/Hero';
+import Products from '@/components/Products';
+import Categories from '@/components/Categories';
 
 export default {
-  name: 'Home',
-
-  // components: {
-  //   HelloWorld,
-  // },
+  name: 'App',
+  components: {
+    Hero,
+    Products,
+    Categories,
+  },
+  data: () => ({
+    //
+  }),
 };
 </script>

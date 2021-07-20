@@ -13,7 +13,6 @@
       <v-btn text small rounded class="text-none"> Papeleria </v-btn>
       <v-btn text small rounded class="text-none"> Poleras </v-btn>
       <v-btn text small rounded class="text-none"> Tazas </v-btn>
-      <v-btn text small rounded class="text-none"> Otros </v-btn>
       <v-btn text small rounded class="text-none"> Contacto </v-btn>
     </v-toolbar>
   </div>
