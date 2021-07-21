@@ -12,12 +12,13 @@
           sm="4"
           md="2"
         >
-          <router-link to="/categoria-sampler">
+          <router-link to="/busqueda">
             <v-img
               :src="category.photo"
               aspect-ratio="1"
               gradient="to top right, rgba(165, 165, 165,.1), rgba(244,67,54,.3)"
               dark
+              class="rounded"
             >
               <v-card-title class="subtitle-2">{{
                 category.name

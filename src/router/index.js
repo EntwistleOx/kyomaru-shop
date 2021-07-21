@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Product from '../views/Product.vue';
+import Search from '../views/Search.vue';
+import Cart from '../views/Cart.vue';
 
 Vue.use(VueRouter);
 
@@ -15,6 +17,16 @@ const routes = [
     path: '/producto-sampler',
     name: 'Product',
     component: Product,
+  },
+  {
+    path: '/busqueda',
+    name: 'Search',
+    component: Search,
+  },
+  {
+    path: '/carrito',
+    name: 'Cart',
+    component: Cart,
   },
 ];
 

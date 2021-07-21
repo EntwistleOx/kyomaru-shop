@@ -18,19 +18,10 @@
 
               <v-card-title>{{ product.name }}</v-card-title>
 
-              <v-card-text class="mb-0">
-                <v-row align="center" class="mx-0">
-                  <v-rating
-                    :value="4.5"
-                    color="amber"
-                    dense
-                    half-increments
-                    readonly
-                    size="14"
-                  ></v-rating>
-                </v-row>
-
-                <div class="mt-4 text-subtitle-1">${{ product.price }}</div>
+              <v-card-text>
+                <div class="text-subtitle-1">
+                  <strong> ${{ product.price }} </strong>
+                </div>
               </v-card-text>
             </v-card>
           </router-link>

@@ -24,20 +24,27 @@
       </router-link>
 
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-btn icon to="busqueda" class="hidden-sm-and-down">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-      <v-btn icon>
+      <v-btn icon class="hidden-sm-and-down">
         <v-icon>mdi-account</v-icon>
       </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-cart</v-icon>
+      <v-btn icon to="carrito">
+        <v-badge color="blue" content="3">
+          <v-icon>mdi-cart</v-icon>
+        </v-badge>
       </v-btn>
+      <v-btn text rounded class="hidden-md-and-up"> Menu </v-btn>
 
-      <v-divider vertical></v-divider>
+      <v-divider vertical class="hidden-sm-and-down mx-2"></v-divider>
 
-      <v-btn text small rounded class="text-none"> Registrate </v-btn>
-      <v-btn text small rounded class="text-none"> Iniciar Sesion </v-btn>
+      <v-btn text small rounded class="text-none hidden-sm-and-down">
+        Registrate
+      </v-btn>
+      <v-btn text small rounded class="text-none hidden-sm-and-down">
+        Iniciar Sesion
+      </v-btn>
     </v-app-bar>
   </div>
 </template>

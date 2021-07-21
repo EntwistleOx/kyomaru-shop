@@ -2,7 +2,7 @@
   <v-app>
     <Navbar />
     <Menu />
-
+    <Drawer />
     <v-main>
       <router-view />
     </v-main>
@@ -15,6 +15,7 @@
 import Navbar from '@/components/Navbar';
 import Menu from '@/components/Menu';
 import Footer from '@/components/Footer';
+import Drawer from '@/components/Drawer';
 
 export default {
   name: 'App',
@@ -22,6 +23,7 @@ export default {
     Navbar,
     Menu,
     Footer,
+    Drawer,
   },
   data: () => ({
     //

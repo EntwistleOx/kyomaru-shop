@@ -1,19 +1,39 @@
 <template>
   <div>
-    <v-toolbar dense>
-      <v-btn text small rounded class="text-none"> Abanicos </v-btn>
-      <v-btn text small rounded class="text-none"> Ceremonia del Te </v-btn>
-      <v-btn text small rounded class="text-none"> Colgantes & Llaveros </v-btn>
-      <v-btn text small rounded class="text-none"> Daruma </v-btn>
-      <v-btn text small rounded class="text-none"> Furin </v-btn>
-      <v-btn text small rounded class="text-none"> Zodiaco Oriental </v-btn>
-      <v-btn text small rounded class="text-none"> Incienso </v-btn>
-      <v-btn text small rounded class="text-none"> Lucky Cat </v-btn>
-      <v-btn text small rounded class="text-none"> Omamori </v-btn>
-      <v-btn text small rounded class="text-none"> Papeleria </v-btn>
-      <v-btn text small rounded class="text-none"> Poleras </v-btn>
-      <v-btn text small rounded class="text-none"> Tazas </v-btn>
-      <v-btn text small rounded class="text-none"> Contacto </v-btn>
+    <v-toolbar dense class="hidden-sm-and-down">
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Abanicos
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Ceremonia del Te
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Colgantes & Llaveros
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda"> Daruma </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda"> Furin </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Zodiaco Oriental
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Incienso
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Lucky Cat
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Omamori
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Papeleria
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Poleras
+      </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda"> Tazas </v-btn>
+      <v-btn text small rounded class="text-none" to="busqueda">
+        Contacto
+      </v-btn>
     </v-toolbar>
   </div>
 </template>
