@@ -57,7 +57,7 @@
               </div>
             </v-col>
             <v-col class="shrink">
-              <v-btn color="info" outlined to="checkout">Pagar</v-btn>
+              <v-btn color="info" outlined rounded to="checkout">Pagar</v-btn>
             </v-col>
           </v-row>
         </v-alert>
