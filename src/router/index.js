@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Product from '../views/Product.vue';
 import Search from '../views/Search.vue';
 import Cart from '../views/Cart.vue';
+import Checkout from '../views/Checkout.vue';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/carrito',
     name: 'Cart',
     component: Cart,
+  },
+  {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout,
   },
 ];
 

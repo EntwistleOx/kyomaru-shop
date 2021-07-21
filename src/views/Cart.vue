@@ -1,69 +1,67 @@
 <template>
-  <div>
-    <v-container>
-      <v-col v-for="item in items" :key="item.id" cols="12">
-        <v-card>
-          <div class="d-flex">
-            <v-avatar class="ma-3" size="125" tile>
-              <v-img :src="item.photo"></v-img>
-            </v-avatar>
-            <div>
-              <v-card-title class="text-h6">
-                {{ item.name }}
-              </v-card-title>
+  <v-container>
+    <v-col v-for="item in items" :key="item.id" cols="12">
+      <v-card>
+        <div class="d-flex">
+          <v-avatar class="ma-3" size="125" tile>
+            <v-img :src="item.photo"></v-img>
+          </v-avatar>
+          <div>
+            <v-card-title class="text-h6">
+              {{ item.name }}
+            </v-card-title>
 
-              <v-card-subtitle>Precio: ${{ item.price }}</v-card-subtitle>
+            <v-card-subtitle>Precio: ${{ item.price }}</v-card-subtitle>
 
-              <v-card-actions>
-                <v-btn class="mx-2" fab dark x-small color="primary">
-                  <v-icon dark> mdi-minus </v-icon>
-                </v-btn>
-                <v-text-field
-                  label="Cantidad"
-                  readonly
-                  rounded
-                  light
-                  outlined
-                  dense
-                  v-model="item.qty"
-                  hide-details="auto"
-                ></v-text-field>
-                <v-btn class="mx-2" fab dark x-small color="primary">
-                  <v-icon dark> mdi-plus </v-icon>
-                </v-btn>
-              </v-card-actions>
-            </div>
-            <div class="ma-3 ml-auto">
-              <v-btn fab dark x-small color="error">
-                <v-icon dark> mdi-close </v-icon>
+            <v-card-actions>
+              <v-btn class="mx-2" fab dark x-small color="primary">
+                <v-icon dark> mdi-minus </v-icon>
               </v-btn>
-            </div>
+              <v-text-field
+                label="Cantidad"
+                readonly
+                rounded
+                light
+                outlined
+                dense
+                v-model="item.qty"
+                hide-details="auto"
+              ></v-text-field>
+              <v-btn class="mx-2" fab dark x-small color="primary">
+                <v-icon dark> mdi-plus </v-icon>
+              </v-btn>
+            </v-card-actions>
           </div>
-        </v-card>
-      </v-col>
-      <v-col cols="12">
-        <v-alert
-          border="left"
-          colored-border
-          color="deep-purple accent-4"
-          elevation="2"
-        >
-          <v-row align="center">
-            <v-col class="grow">
-              <div class="text-h6">Sub Total: $588400</div>
-              <div>
-                En la pantalla de pagos se incluye el impuesto y se calculan los
-                gastos de envío.
-              </div>
-            </v-col>
-            <v-col class="shrink">
-              <v-btn color="info" outlined rounded to="checkout">Pagar</v-btn>
-            </v-col>
-          </v-row>
-        </v-alert>
-      </v-col>
-    </v-container>
-  </div>
+          <div class="ma-3 ml-auto">
+            <v-btn fab dark x-small color="error">
+              <v-icon dark> mdi-close </v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </v-card>
+    </v-col>
+    <v-col cols="12">
+      <v-alert
+        border="left"
+        colored-border
+        color="deep-purple accent-4"
+        elevation="2"
+      >
+        <v-row align="center">
+          <v-col class="grow">
+            <div class="text-h6">Sub Total: $588400</div>
+            <div>
+              En la pantalla de pagos se incluye el impuesto y se calculan los
+              gastos de envío.
+            </div>
+          </v-col>
+          <v-col class="shrink">
+            <v-btn color="info" outlined rounded to="checkout">Pagar</v-btn>
+          </v-col>
+        </v-row>
+      </v-alert>
+    </v-col>
+  </v-container>
 </template>
 
 <script>
