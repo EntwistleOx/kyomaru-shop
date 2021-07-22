@@ -23,6 +23,11 @@
                   <strong> ${{ product.price }} </strong>
                 </div>
               </v-card-text>
+              <v-card-actions>
+                <v-btn outlined rounded color="error" small class="text-none">
+                  Agregar al Carrito
+                </v-btn>
+              </v-card-actions>
             </v-card>
           </router-link>
         </v-col>

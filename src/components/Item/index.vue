@@ -24,21 +24,25 @@
             </template>
           </v-breadcrumbs>
           <h1 class="pl-6 text-h5">Set Ceremonia Del Te</h1>
-          <p class="pl-6 text-h6">$147.100</p>
-          <div class="pl-2">
-            <v-subheader class="mb-2">Cantidad:</v-subheader>
-            <v-slider
-              class="pl-2"
-              v-model="slider"
-              :thumb-size="18"
-              :max="10"
-              :min="1"
-              thumb-label="always"
-              step="1"
-              ticks="always"
-            ></v-slider>
+          <p class="pl-6 text-h6">Precio: $147.100</p>
+          <div class="pl-4 mt-5 d-flex">
+            <v-btn class="mx-2" fab dark x-small color="primary">
+              <v-icon dark> mdi-minus </v-icon>
+            </v-btn>
+            <v-text-field
+              label="Cantidad"
+              light
+              dense
+              v-model="qty"
+              hide-details="auto"
+            ></v-text-field>
+            <v-btn class="mx-2" fab dark x-small color="primary">
+              <v-icon dark> mdi-plus </v-icon>
+            </v-btn>
           </div>
-          <v-btn class="ml-6" outlined color="red"> Agregar al Carrito </v-btn>
+          <v-btn class="ml-6 mt-5 text-none" outlined rounded color="error">
+            Agregar al Carrito
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -49,6 +53,7 @@
 export default {
   data: () => ({
     slider: 1,
+    qty: 1,
     items: [
       {
         text: 'Inicio',
@@ -70,4 +75,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-input {
+  max-width: 52px;
+}
+</style>

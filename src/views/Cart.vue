@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-col v-for="item in items" :key="item.id" cols="12">
+  <v-container class="mt-4">
+    <v-col v-for="item in items" :key="item.id" cols="12" class="py-1 px-0">
       <v-card>
         <div class="d-flex">
           <v-avatar class="ma-3" size="125" tile>
@@ -11,24 +11,25 @@
               {{ item.name }}
             </v-card-title>
 
-            <v-card-subtitle>Precio: ${{ item.price }}</v-card-subtitle>
+            <v-card-subtitle class="text-subtitle-1"
+              >Precio:
+              <strong> ${{ item.price }} </strong>
+            </v-card-subtitle>
 
             <v-card-actions>
               <v-btn class="mx-2" fab dark x-small color="primary">
-                <v-icon dark> mdi-minus </v-icon>
+                <v-icon dark small> mdi-minus </v-icon>
               </v-btn>
               <v-text-field
                 label="Cantidad"
                 readonly
-                rounded
                 light
-                outlined
                 dense
                 v-model="item.qty"
                 hide-details="auto"
               ></v-text-field>
               <v-btn class="mx-2" fab dark x-small color="primary">
-                <v-icon dark> mdi-plus </v-icon>
+                <v-icon dark small> mdi-plus </v-icon>
               </v-btn>
             </v-card-actions>
           </div>
@@ -40,7 +41,7 @@
         </div>
       </v-card>
     </v-col>
-    <v-col cols="12">
+    <v-col cols="12" class="py-1 px-0">
       <v-alert
         border="left"
         colored-border
@@ -56,7 +57,9 @@
             </div>
           </v-col>
           <v-col class="shrink">
-            <v-btn color="info" outlined rounded to="checkout">Pagar</v-btn>
+            <v-btn color="info" class="text-none" outlined rounded to="checkout"
+              >Pagar</v-btn
+            >
           </v-col>
         </v-row>
       </v-alert>
@@ -97,6 +100,6 @@ export default {
 
 <style scoped>
 .v-input {
-  max-width: 98px;
+  max-width: 52px;
 }
 </style>
