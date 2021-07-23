@@ -7,7 +7,6 @@
       <v-btn
         color="success"
         fab
-        large
         dark
         bottom
         absolute

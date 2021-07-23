@@ -13,17 +13,24 @@
           md="2"
         >
           <router-link to="/busqueda">
-            <v-img
-              :src="category.photo"
-              aspect-ratio="1"
-              gradient="to top right, rgba(165, 165, 165,.1), rgba(244,67,54,.3)"
-              dark
-              class="rounded"
-            >
-              <v-card-title class="subtitle-2">{{
-                category.name
-              }}</v-card-title>
-            </v-img>
+            <v-hover v-slot="{ hover }">
+              <v-card
+                :elevation="hover ? 16 : 2"
+                :class="{ 'on-hover': hover }"
+              >
+                <v-img
+                  :src="category.photo"
+                  aspect-ratio="1"
+                  gradient="to top right, rgba(165, 165, 165,.1), rgba(244,67,54,.3)"
+                  dark
+                  class="rounded"
+                >
+                  <v-card-title class="subtitle-2">{{
+                    category.name
+                  }}</v-card-title>
+                </v-img>
+              </v-card>
+            </v-hover>
           </router-link>
         </v-col>
       </v-row>

@@ -13,22 +13,25 @@
           md="4"
         >
           <router-link to="/producto-sampler">
-            <v-card>
-              <v-img :src="product.photo" height="300px"></v-img>
+            <v-hover v-slot="{ hover }">
+              <v-card
+                :elevation="hover ? 16 : 2"
+                :class="{ 'on-hover': hover }"
+              >
+                <v-img :src="product.photo" height="300px"></v-img>
 
-              <v-card-title>{{ product.name }}</v-card-title>
+                <v-card-title>{{ product.name }}</v-card-title>
 
-              <v-card-text>
-                <div class="text-subtitle-1">
-                  <strong> ${{ product.price }} </strong>
-                </div>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn outlined rounded color="error" small class="text-none">
-                  Agregar al Carrito
-                </v-btn>
-              </v-card-actions>
-            </v-card>
+                <v-card-text>
+                  <div class="text-subtitle-1">
+                    <strong class="text-decoration-line-through mr-3">
+                      ${{ product.price }}
+                    </strong>
+                    <strong> ${{ product.price - 70000 }} </strong>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-hover>
           </router-link>
         </v-col>
       </v-row>

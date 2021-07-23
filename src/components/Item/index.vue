@@ -24,7 +24,12 @@
             </template>
           </v-breadcrumbs>
           <h1 class="pl-6 text-h5">Set Ceremonia Del Te</h1>
-          <p class="pl-6 text-h6">Precio: $147.100</p>
+          <p class="pl-6 text-h6">
+            Precio:
+            <span class="text-decoration-line-through mr-3"> $147.100 </span>
+            <span> $147.100 </span>
+          </p>
+
           <div class="pl-4 mt-5 d-flex">
             <v-btn class="mx-2" fab dark x-small color="primary">
               <v-icon dark> mdi-minus </v-icon>

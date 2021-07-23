@@ -149,7 +149,7 @@
                 <v-card-actions>
                   <v-btn
                     color="success "
-                    @click="e1 = 3"
+                    @click="initBuy"
                     class="text-none"
                     rounded
                     block
@@ -172,6 +172,13 @@ export default {
     return {
       e1: 1,
     };
+  },
+
+  methods: {
+    async initBuy() {
+      // const { monto } = this;
+      window.location = `https://982eo.sse.codesandbox.io/webpay?monto=6000&return_url=http://localhost:8080/`;
+    },
   },
 };
 </script>

@@ -35,7 +35,9 @@
           <v-icon>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
-      <v-btn text rounded class="hidden-md-and-up"> Menu </v-btn>
+      <v-btn text rounded class="hidden-md-and-up">
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
 
       <v-divider vertical class="hidden-sm-and-down mx-2"></v-divider>
 
