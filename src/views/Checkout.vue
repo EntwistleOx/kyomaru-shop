@@ -53,13 +53,22 @@
         <v-stepper-content step="2">
           <v-row>
             <v-col cols="12" md="6">
-              <v-text-field label="Pais*" required></v-text-field>
+              <v-text-field
+                label="Pais*"
+                required
+                v-model="country"
+                readonly
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Ciudad*" required></v-text-field>
+              <v-select
+                :items="regions"
+                v-model="region"
+                label="Region*"
+              ></v-select>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Estado*" required></v-text-field>
+              <v-select :items="communes" label="Comuna*"></v-select>
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field label="Codigo postal*" required></v-text-field>
@@ -174,12 +183,24 @@ export default {
     return {
       e1: 1,
       shipment: 0,
+      country: 'Chile',
+      region: '',
     };
   },
   computed: {
-    ...mapGetters(['getSubTotal']),
+    ...mapGetters(['getSubTotal', 'getRegions']),
     finalTotal() {
       return this.getSubTotal + +this.shipment;
+    },
+    regions() {
+      const search = this.getRegions.map((item) => item.region);
+      return search;
+    },
+    communes() {
+      const search = this.getRegions
+        .filter((item) => item.region === this.region)
+        .map((item) => item.comunas)[0];
+      return search;
     },
   },
 

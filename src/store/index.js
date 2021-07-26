@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { products } from '../data/products.json';
+import { regions } from '../data/comunas-regiones.json';
 
 Vue.use(Vuex);
 
@@ -10,6 +11,7 @@ export default new Vuex.Store({
     products: products,
     categories: [],
     user: {},
+    regions: regions,
   },
   mutations: {
     ADD_TO_CART(state, product) {
@@ -61,6 +63,9 @@ export default new Vuex.Store({
     },
     getCart: ({ cart }) => {
       return cart;
+    },
+    getRegions: ({ regions }) => {
+      return regions;
     },
     getItem:
       ({ products }) =>
