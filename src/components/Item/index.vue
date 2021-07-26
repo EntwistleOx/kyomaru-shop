@@ -24,11 +24,18 @@
           <h1 class="pl-6 text-h5">{{ item.name }}</h1>
           <p class="pl-6 text-h6">
             Precio:
-            <span> {{ item.price }} </span>
+            <span> ${{ item.price }} </span>
           </p>
 
           <div class="pl-4 mt-5 d-flex">
-            <v-btn class="mx-2" fab dark x-small color="primary">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              x-small
+              color="primary"
+              @click="substract"
+            >
               <v-icon dark> mdi-minus </v-icon>
             </v-btn>
             <v-text-field
@@ -38,7 +45,7 @@
               v-model="item.qty"
               hide-details="auto"
             ></v-text-field>
-            <v-btn class="mx-2" fab dark x-small color="primary">
+            <v-btn class="mx-2" fab dark x-small color="primary" @click="add">
               <v-icon dark> mdi-plus </v-icon>
             </v-btn>
           </div>
@@ -84,6 +91,14 @@ export default {
   }),
   computed: {
     ...mapGetters(['getItem']),
+  },
+  methods: {
+    add() {
+      this.item.qty >= 10 ? this.item.qty : this.item.qty++;
+    },
+    substract() {
+      this.item.qty <= 1 ? this.item.qty : this.item.qty--;
+    },
   },
   mounted() {
     const result = this.getItem(this.$route.params.id);
