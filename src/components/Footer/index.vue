@@ -5,7 +5,11 @@
         <v-container class="py-0">
           <v-row>
             <v-col cols="12" sm="6">
-              <img src="kyomaru-footer.webp" width="200" class="mb-1" />
+              <img
+                src="../../assets/kyomaru-footer.webp"
+                width="200"
+                class="mb-1"
+              />
               <p class="body-1">
                 Japon en tu casa. Hacemos pedidos especiales, si necesitas algo
                 de Japón y lo podemos enviar, haremos todo lo posible para que

@@ -21,7 +21,7 @@ const routes = [
     component: Home,
   },
   {
-    path: '/producto-sampler',
+    path: '/producto/:id',
     name: 'Product',
     component: Product,
   },

@@ -7,7 +7,7 @@
             alt="Vuetify Logo"
             class="shrink mr-2"
             contain
-            src="kyomaru-logo.webp"
+            src="../../assets/kyomaru-logo.webp"
             transition="scale-transition"
             width="40"
           />
@@ -17,7 +17,7 @@
             class="shrink hidden-sm-and-down"
             contain
             min-width="100"
-            src="kyomaru-name.webp"
+            src="../../assets/kyomaru-name.webp"
             width="120"
           />
         </div>

@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <Navbar />
-    <!-- <Menu /> -->
     <Drawer />
     <v-main>
       <v-btn
@@ -24,7 +23,6 @@
 
 <script>
 import Navbar from '@/components/Navbar';
-// import Menu from '@/components/Menu';
 import Footer from '@/components/Footer';
 import Drawer from '@/components/Drawer';
 
@@ -32,7 +30,6 @@ export default {
   name: 'App',
   components: {
     Navbar,
-    // Menu,
     Footer,
     Drawer,
   },
@@ -43,10 +40,9 @@ export default {
 </script>
 
 <style>
-/* This is for documentation purposes and will not be needed in your application */
 .v-btn--example {
   bottom: 0;
   position: fixed;
-  margin: 0 0 48px 0;
+  margin: 0 -4px 40px 0;
 }
 </style>
