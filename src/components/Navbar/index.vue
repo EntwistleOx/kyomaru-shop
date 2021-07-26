@@ -31,7 +31,11 @@
         <v-icon>mdi-account</v-icon>
       </v-btn>
       <v-btn icon to="carrito">
-        <v-badge color="blue" content="3">
+        <v-badge
+          color="blue"
+          :content="getTotalCountInCart"
+          :value="getTotalCountInCart"
+        >
           <v-icon>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
@@ -160,6 +164,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Navbar',
   data: () => ({
@@ -167,6 +173,9 @@ export default {
     tab: null,
     items: ['Registrate', 'Iniciar Sesion'],
   }),
+  computed: {
+    ...mapGetters(['getTotalCountInCart']),
+  },
 };
 </script>
 

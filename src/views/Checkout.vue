@@ -87,21 +87,21 @@
         <v-stepper-content step="3">
           <v-row>
             <v-col cols="12" md="6">
-              <v-radio-group mandatory>
+              <v-radio-group mandatory v-model="shipment">
                 <template v-slot:label>
                   <div><strong>Valor del Envio</strong></div>
                 </template>
                 <v-radio
                   label="Caja hasta 1,8kg, Envío Standard - 7 a 20 días / $36.700"
-                  value="radio-1"
+                  value="36700"
                 ></v-radio>
                 <v-radio
                   label="Caja hasta 3kg, Envío Standard - 7 a 20 días / $49.900"
-                  value="radio-2"
+                  value="49900"
                 ></v-radio>
                 <v-radio
                   label="	Caja hasta 10kg, Envío Standard - 7 a 20 días / $76.500"
-                  value="radio-3"
+                  value="76500"
                 ></v-radio>
               </v-radio-group>
 
@@ -130,9 +130,9 @@
 
                   <v-row>
                     <v-col cols="6"> Subtotal </v-col>
-                    <v-col cols="6"> $588.400 </v-col>
+                    <v-col cols="6"> ${{ getSubTotal }} </v-col>
                     <v-col cols="6"> Envio </v-col>
-                    <v-col cols="6"> $36.700 </v-col>
+                    <v-col cols="6"> ${{ shipment }} </v-col>
                   </v-row>
 
                   <v-divider class="my-5"></v-divider>
@@ -142,7 +142,7 @@
                       <strong class="text-h6"> Total </strong>
                     </v-col>
                     <v-col cols="6">
-                      <strong class="text-h6"> $625.100 </strong>
+                      <strong class="text-h6"> ${{ finalTotal }} </strong>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -167,17 +167,26 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
       e1: 1,
+      shipment: 0,
     };
+  },
+  computed: {
+    ...mapGetters(['getSubTotal']),
+    finalTotal() {
+      return this.getSubTotal + +this.shipment;
+    },
   },
 
   methods: {
     async initBuy() {
-      // const { monto } = this;
-      window.location = `https://982eo.sse.codesandbox.io/webpay?monto=6000&return_url=http://localhost:8080/`;
+      const { shipment } = this;
+      window.location = `https://982eo.sse.codesandbox.io/webpay?monto=${shipment}&return_url=http://localhost:8080/`;
     },
   },
 };

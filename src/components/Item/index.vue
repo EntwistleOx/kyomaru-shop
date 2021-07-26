@@ -42,14 +42,20 @@
               label="Cantidad"
               light
               dense
-              v-model="item.qty"
+              v-model="item.quantity"
               hide-details="auto"
             ></v-text-field>
             <v-btn class="mx-2" fab dark x-small color="primary" @click="add">
               <v-icon dark> mdi-plus </v-icon>
             </v-btn>
           </div>
-          <v-btn class="ml-6 mt-5 text-none" outlined rounded color="error">
+          <v-btn
+            class="ml-6 mt-5 text-none"
+            outlined
+            rounded
+            color="error"
+            @click="addToCart"
+          >
             Agregar al Carrito
           </v-btn>
         </v-col>
@@ -59,7 +65,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data: () => ({
@@ -69,23 +75,23 @@ export default {
       description: '',
       photo: '',
       price: '',
-      qty: 1,
+      quantity: 1,
     },
     items: [
       {
         text: 'Inicio',
         disabled: false,
-        href: 'breadcrumbs_dashboard',
+        href: '/',
       },
       {
         text: 'Ceremonia del Te',
         disabled: false,
-        href: 'breadcrumbs_link_1',
+        href: 'busqueda',
       },
       {
         text: 'Set Ceremonia del Te',
         disabled: true,
-        href: 'breadcrumbs_link_2',
+        href: '',
       },
     ],
   }),
@@ -93,11 +99,15 @@ export default {
     ...mapGetters(['getItem']),
   },
   methods: {
+    ...mapActions(['add_To_Cart']),
     add() {
-      this.item.qty >= 10 ? this.item.qty : this.item.qty++;
+      this.item.quantity >= 10 ? this.item.quantity : this.item.quantity++;
     },
     substract() {
-      this.item.qty <= 1 ? this.item.qty : this.item.qty--;
+      this.item.quantity <= 1 ? this.item.quantity : this.item.quantity--;
+    },
+    addToCart() {
+      this.add_To_Cart(this.item);
     },
   },
   mounted() {
