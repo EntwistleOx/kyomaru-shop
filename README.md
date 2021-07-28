@@ -1,34 +1,40 @@
-# kyomaru
+# Kyomaru Shop
 
-## Project setup
+Kyomaru es una tienda online que importa artesania Japonesa desde Japon hacia Chile.
+
+Kyumaru Shop permite comprar articulos artesanales Japoneses y enviarlos hasta el hogar del comprador en Chile.
+
+La aplicacion apunta a todos aquellos que les interese la cultura Japonesa que desean comprar articulos de tematica artesanal.
+
+
+## Instalacion
+
+### Instalar dependencias
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compilar para desarrollo
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compilado para produccion
 ```
 npm run build
 ```
 
-### Run your unit tests
+### Test unitarios
 ```
 npm run test:unit
 ```
 
-### Run your end-to-end tests
+### Test end-to-end 
 ```
 npm run test:e2e
 ```
 
-### Lints and fixes files
+### Linteo y formateo de archivos
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
