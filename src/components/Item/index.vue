@@ -110,7 +110,7 @@ export default {
       this.add_To_Cart(this.item);
     },
   },
-  mounted() {
+  created() {
     // created
     const result = this.getItem(this.$route.params.id);
     this.item.id = result.id;

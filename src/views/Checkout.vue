@@ -19,25 +19,62 @@
         <v-stepper-content step="1">
           <v-row>
             <v-col cols="12" md="6">
-              <v-text-field label="Nombre*" required></v-text-field>
+              <v-text-field
+                label="Nombre*"
+                v-model="name"
+                :error-messages="nameErrors"
+                required
+                @input="$v.name.$touch()"
+                @blur="$v.name.$touch()"
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Apellido*" required></v-text-field>
+              <v-text-field
+                label="Apellido*"
+                v-model="lastName"
+                :error-messages="lastNameErrors"
+                required
+                @input="$v.lastName.$touch()"
+                @blur="$v.lastName.$touch()"
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="RUT*" required></v-text-field>
+              <v-text-field
+                label="RUT*"
+                v-model="rut"
+                :error-messages="rutErrors"
+                required
+                @input="$v.rut.$touch()"
+                @blur="$v.rut.$touch()"
+              ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Telefono*" required></v-text-field>
+              <v-text-field
+                prepend-inner-icon="mdi-plus"
+                placeholder="56911112222"
+                label="Telefono*"
+                v-model="phone"
+                :error-messages="phoneErrors"
+                required
+                @input="$v.phone.$touch()"
+                @blur="$v.phone.$touch()"
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-text-field label="Email*" required></v-text-field>
+              <v-text-field
+                label="Email*"
+                v-model="email"
+                :error-messages="emailErrors"
+                required
+                @input="$v.email.$touch()"
+                @blur="$v.email.$touch()"
+              ></v-text-field>
             </v-col>
           </v-row>
 
           <v-btn
             color="primary"
-            @click="goStepTwo"
+            @click="goNextStep"
             class="text-none mr-3"
             outlined
             rounded
@@ -50,27 +87,57 @@
           <v-row>
             <v-col cols="12" md="6">
               <v-text-field
-                label="Pais*"
-                required
-                v-model="country"
                 readonly
+                label="Pais*"
+                v-model="country"
+                :error-messages="countryErrors"
+                required
+                @input="$v.country.$touch()"
+                @blur="$v.country.$touch()"
               ></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-select
                 :items="regions"
-                v-model="region"
                 label="Region*"
+                v-model="region"
+                :error-messages="regionErrors"
+                required
+                @input="$v.region.$touch()"
+                @blur="$v.region.$touch()"
               ></v-select>
             </v-col>
             <v-col cols="12" md="6">
-              <v-select :items="communes" label="Comuna*"></v-select>
+              <v-select
+                :items="communes"
+                :disabled="$v.region.$invalid ? true : false"
+                label="Comuna*"
+                v-model="commune"
+                :error-messages="communeErrors"
+                required
+                @input="$v.commune.$touch()"
+                @blur="$v.commune.$touch()"
+              ></v-select>
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Codigo postal*" required></v-text-field>
+              <v-text-field
+                label="Codigo postal*"
+                v-model="zip"
+                :error-messages="zipErrors"
+                required
+                @input="$v.zip.$touch()"
+                @blur="$v.zip.$touch()"
+              ></v-text-field>
             </v-col>
             <v-col cols="12">
-              <v-text-field label="Direccion*" required></v-text-field>
+              <v-text-field
+                label="Direccion*"
+                v-model="address"
+                :error-messages="addressErrors"
+                required
+                @input="$v.address.$touch()"
+                @blur="$v.address.$touch()"
+              ></v-text-field>
             </v-col>
           </v-row>
 
@@ -86,7 +153,7 @@
 
           <v-btn
             color="primary mr-3"
-            @click="goStepThree"
+            @click="goNextStep"
             class="text-none mr-3"
             outlined
             rounded
@@ -97,7 +164,14 @@
         <v-stepper-content step="3">
           <v-row>
             <v-col cols="12" md="6">
-              <v-radio-group mandatory v-model="shipment">
+              <v-radio-group
+                mandatory
+                v-model="shipment"
+                :error-messages="shipmentErrors"
+                required
+                @input="$v.shipment.$touch()"
+                @blur="$v.shipment.$touch()"
+              >
                 <template v-slot:label>
                   <div><strong>Valor del Envio</strong></div>
                 </template>
@@ -169,7 +243,17 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { required } from 'vuelidate/lib/validators';
+import { validationMixin } from 'vuelidate';
+import {
+  required,
+  email,
+  minLength,
+  maxLength,
+  numeric,
+} from 'vuelidate/lib/validators';
+import { validate } from 'rut.js';
+
+const validateRut = (value) => validate(value);
 
 export default {
   data() {
@@ -188,6 +272,7 @@ export default {
       shipment: '',
     };
   },
+  mixins: [validationMixin],
   validations: {
     name: {
       required,
@@ -197,12 +282,17 @@ export default {
     },
     rut: {
       required,
+      validateRut,
     },
     phone: {
       required,
+      minLength: minLength(11),
+      maxLength: maxLength(11),
+      numeric,
     },
     email: {
       required,
+      email,
     },
     country: {
       required,
@@ -222,13 +312,6 @@ export default {
     shipment: {
       required,
     },
-    // discount: {
-    //   required: requiredIf(function (model) {
-    //     return model.haveDiscount;
-    //   }),
-    //   integer,
-    //   minValue: (price) => price >= 0,
-    // },
   },
   computed: {
     ...mapGetters(['getSubTotal', 'getRegions', 'getShiping']),
@@ -245,14 +328,120 @@ export default {
         .map((item) => item.comunas)[0];
       return search;
     },
+    nameErrors() {
+      const errors = [];
+      if (!this.$v.name.$dirty) return errors;
+      !this.$v.name.required && errors.push('El Nombre es requerido.');
+      return errors;
+    },
+    lastNameErrors() {
+      const errors = [];
+      if (!this.$v.lastName.$dirty) return errors;
+      !this.$v.lastName.required && errors.push('El Apellido es requerido.');
+      return errors;
+    },
+    rutErrors() {
+      const errors = [];
+      if (!this.$v.rut.$dirty) return errors;
+      !this.$v.rut.required && errors.push('El RUT es requerido.');
+      !this.$v.rut.validateRut && errors.push('El RUT es invalido.');
+      return errors;
+    },
+    phoneErrors() {
+      const errors = [];
+      if (!this.$v.phone.$dirty) return errors;
+      !this.$v.phone.required && errors.push('El Telefono es requerido.');
+      !this.$v.phone.numeric &&
+        errors.push('El Telefono debe ser de valor numerico.');
+      !this.$v.phone.minLength &&
+        errors.push('El largo minimo del Telefono es 11 caracteres.');
+      !this.$v.phone.maxLength &&
+        errors.push('El largo maximo del Telefono es 11 caracteres.');
+      return errors;
+    },
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.email.$dirty) return errors;
+      !this.$v.email.required && errors.push('El Email es requerido.');
+      !this.$v.email.email && errors.push('El Email es invalido.');
+      return errors;
+    },
+    countryErrors() {
+      const errors = [];
+      if (!this.$v.country.$dirty) return errors;
+      !this.$v.country.required && errors.push('El Pais es requerido.');
+      return errors;
+    },
+    regionErrors() {
+      const errors = [];
+      if (!this.$v.region.$dirty) return errors;
+      !this.$v.region.required && errors.push('La Region es requerida.');
+      return errors;
+    },
+    communeErrors() {
+      const errors = [];
+      if (!this.$v.commune.$dirty) return errors;
+      !this.$v.commune.required && errors.push('La Comuna es requerida.');
+      return errors;
+    },
+    zipErrors() {
+      const errors = [];
+      if (!this.$v.zip.$dirty) return errors;
+      !this.$v.zip.required && errors.push('El Codigo postal es requerido.');
+      return errors;
+    },
+    addressErrors() {
+      const errors = [];
+      if (!this.$v.address.$dirty) return errors;
+      !this.$v.address.required && errors.push('La Direccion es requerida.');
+      return errors;
+    },
+    shipmentErrors() {
+      const errors = [];
+      if (!this.$v.shipment.$dirty) return errors;
+      !this.$v.shipment.required && errors.push('El Envio es requerido.');
+      return errors;
+    },
   },
 
   methods: {
-    goStepTwo() {
-      this.step = 2;
-    },
-    goStepThree() {
-      this.step = 3;
+    goNextStep() {
+      const { step } = this;
+      if (step === 1) {
+        if (
+          this.$v.name.$invalid ||
+          this.$v.lastName.$invalid ||
+          this.$v.rut.$invalid ||
+          this.$v.phone.$invalid ||
+          this.$v.email.$invalid
+        ) {
+          this.$v.name.$touch();
+          this.$v.lastName.$touch();
+          this.$v.rut.$touch();
+          this.$v.phone.$touch();
+          this.$v.email.$touch();
+          return false;
+        } else {
+          return (this.step = 2);
+        }
+      } else if (step === 2) {
+        if (
+          this.$v.country.$invalid ||
+          this.$v.region.$invalid ||
+          this.$v.commune.$invalid ||
+          this.$v.zip.$invalid ||
+          this.$v.address.$invalid
+        ) {
+          this.$v.country.$touch();
+          this.$v.region.$touch();
+          this.$v.commune.$touch();
+          this.$v.zip.$touch();
+          this.$v.address.$touch();
+          return false;
+        } else {
+          return (this.step = 3);
+        }
+      }
     },
     backStepOne() {
       this.step = 1;
