@@ -24,13 +24,13 @@
       </router-link>
 
       <v-spacer></v-spacer>
-      <v-btn icon to="busqueda" class="hidden-sm-and-down">
+      <v-btn icon to="/busqueda" class="hidden-sm-and-down">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-      <v-btn icon class="hidden-sm-and-down" to="admin-login">
+      <v-btn icon class="hidden-sm-and-down" to="/admin-login">
         <v-icon>mdi-account</v-icon>
       </v-btn>
-      <v-btn icon to="carrito">
+      <v-btn icon to="/carrito">
         <v-badge
           color="blue"
           :content="getTotalCountInCart"
@@ -77,7 +77,6 @@
             </v-tab>
           </v-tabs>
           <v-tabs-items v-model="tab">
-            <!-- <v-tab-item v-for="item in items" :key="item"> </v-tab-item> -->
             <v-tab-item>
               <v-card-text>
                 <v-container>

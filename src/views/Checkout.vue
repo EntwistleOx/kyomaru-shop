@@ -1,14 +1,14 @@
 <template>
   <v-container class="mt-5">
-    <v-stepper v-model="e1">
+    <v-stepper v-model="step">
       <v-stepper-header flat>
-        <v-stepper-step :complete="e1 > 1" step="1">
+        <v-stepper-step :complete="step > 1" step="1">
           Informacion de Contacto
         </v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 2" step="2"> Envio </v-stepper-step>
+        <v-stepper-step :complete="step > 2" step="2"> Envio </v-stepper-step>
 
         <v-divider></v-divider>
 
@@ -37,16 +37,12 @@
 
           <v-btn
             color="primary"
-            @click="e1 = 2"
+            @click="goStepTwo"
             class="text-none mr-3"
             outlined
             rounded
           >
             Continuar
-          </v-btn>
-
-          <v-btn text color="error" class="text-none" outlined rounded>
-            Cancelar
           </v-btn>
         </v-stepper-content>
 
@@ -80,19 +76,24 @@
 
           <v-btn
             color="primary mr-3"
-            @click="e1 = 3"
+            @click="backStepOne"
+            class="text-none mr-3"
+            outlined
+            rounded
+          >
+            Volver
+          </v-btn>
+
+          <v-btn
+            color="primary mr-3"
+            @click="goStepThree"
             class="text-none mr-3"
             outlined
             rounded
           >
             Continuar
           </v-btn>
-
-          <v-btn text color="error" class="text-none" outlined rounded>
-            Cancelar
-          </v-btn>
         </v-stepper-content>
-
         <v-stepper-content step="3">
           <v-row>
             <v-col cols="12" md="6">
@@ -100,32 +101,23 @@
                 <template v-slot:label>
                   <div><strong>Valor del Envio</strong></div>
                 </template>
+
                 <v-radio
-                  label="Caja hasta 1,8kg, Envío Standard - 7 a 20 días / $36.700"
-                  value="36700"
-                ></v-radio>
-                <v-radio
-                  label="Caja hasta 3kg, Envío Standard - 7 a 20 días / $49.900"
-                  value="49900"
-                ></v-radio>
-                <v-radio
-                  label="	Caja hasta 10kg, Envío Standard - 7 a 20 días / $76.500"
-                  value="76500"
+                  v-for="shiping in getShiping"
+                  :key="shiping.id"
+                  :label="shiping.text"
+                  :value="shiping.price"
                 ></v-radio>
               </v-radio-group>
 
               <v-btn
                 color="primary mr-3"
-                @click="e1 = 1"
+                @click="backStepTwo"
                 class="text-none mr-3"
                 outlined
                 rounded
               >
-                Continuar
-              </v-btn>
-
-              <v-btn text color="error" class="text-none" outlined rounded>
-                Cancelar
+                Volver
               </v-btn>
             </v-col>
             <v-col cols="12" md="6">
@@ -177,18 +169,69 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   data() {
     return {
-      e1: 1,
-      shipment: 0,
+      step: 1,
+      name: '',
+      lastName: '',
+      rut: '',
+      phone: '',
+      email: '',
       country: 'Chile',
       region: '',
+      commune: '',
+      zip: '',
+      address: '',
+      shipment: '',
     };
   },
+  validations: {
+    name: {
+      required,
+    },
+    lastName: {
+      required,
+    },
+    rut: {
+      required,
+    },
+    phone: {
+      required,
+    },
+    email: {
+      required,
+    },
+    country: {
+      required,
+    },
+    region: {
+      required,
+    },
+    commune: {
+      required,
+    },
+    zip: {
+      required,
+    },
+    address: {
+      required,
+    },
+    shipment: {
+      required,
+    },
+    // discount: {
+    //   required: requiredIf(function (model) {
+    //     return model.haveDiscount;
+    //   }),
+    //   integer,
+    //   minValue: (price) => price >= 0,
+    // },
+  },
   computed: {
-    ...mapGetters(['getSubTotal', 'getRegions']),
+    ...mapGetters(['getSubTotal', 'getRegions', 'getShiping']),
     finalTotal() {
       return this.getSubTotal + +this.shipment;
     },
@@ -205,6 +248,18 @@ export default {
   },
 
   methods: {
+    goStepTwo() {
+      this.step = 2;
+    },
+    goStepThree() {
+      this.step = 3;
+    },
+    backStepOne() {
+      this.step = 1;
+    },
+    backStepTwo() {
+      this.step = 2;
+    },
     async initBuy() {
       const { shipment } = this;
       window.location = `https://982eo.sse.codesandbox.io/webpay?monto=${shipment}&return_url=http://localhost:8080/`;

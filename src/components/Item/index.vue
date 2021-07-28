@@ -111,6 +111,7 @@ export default {
     },
   },
   mounted() {
+    // created
     const result = this.getItem(this.$route.params.id);
     this.item.id = result.id;
     this.item.name = result.name;

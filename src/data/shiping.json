@@ -1,0 +1,19 @@
+{
+  "shiping": [
+    {
+      "id": 1,
+      "text": "Caja hasta 1,8kg, Envío Standard - 7 a 20 días / $36.700",
+      "price": "36700"
+    },
+    {
+      "id": 2,
+      "text": "Caja hasta 3kg, Envío Standard - 7 a 20 días / $49.900",
+      "price": "49900"
+    },
+    {
+      "id": 3,
+      "text": "Caja hasta 10kg, Envío Standard - 7 a 20 días / $76.500",
+      "price": "76500"
+    }
+  ]
+}
