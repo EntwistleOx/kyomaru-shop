@@ -10,7 +10,6 @@
               <v-text-field
                 v-model="first"
                 label="Email"
-                rounded
                 outlined
               ></v-text-field>
             </v-col>
@@ -19,7 +18,6 @@
               <v-text-field
                 v-model="last"
                 label="Contraseña"
-                rounded
                 outlined
               ></v-text-field>
             </v-col>
@@ -30,13 +28,7 @@
       <v-divider></v-divider>
 
       <v-card-actions>
-        <v-btn
-          color="primary "
-          class="text-none ml-2"
-          outlined
-          rounded
-          to="admin-home"
-        >
+        <v-btn color="primary" block class="text-none" to="admin-home">
           Entrar
         </v-btn>
       </v-card-actions>

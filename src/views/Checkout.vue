@@ -242,7 +242,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { validationMixin } from 'vuelidate';
 import {
   required,
@@ -314,7 +314,13 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getSubTotal', 'getRegions', 'getShiping']),
+    ...mapGetters([
+      'getUser',
+      'getCart',
+      'getSubTotal',
+      'getRegions',
+      'getShiping',
+    ]),
     finalTotal() {
       return this.getSubTotal + +this.shipment;
     },
@@ -403,8 +409,18 @@ export default {
       return errors;
     },
   },
-
+  mounted() {
+    this.setCheckoutData();
+  },
   methods: {
+    ...mapActions(['save_Cart']),
+    setCheckoutData() {
+      this.name = this.getUser.name;
+      this.lastName = this.getUser.lastName;
+      this.rut = this.getUser.rut;
+      this.phone = this.getUser.phone;
+      this.email = this.getUser.email;
+    },
     goNextStep() {
       const { step } = this;
       if (step === 1) {
@@ -450,8 +466,20 @@ export default {
       this.step = 2;
     },
     async initBuy() {
-      const { shipment } = this;
-      window.location = `https://982eo.sse.codesandbox.io/webpay?monto=${shipment}&return_url=http://localhost:8080/`;
+      const address = {
+        country: this.country,
+        region: this.region,
+        commune: this.commune,
+        zip: this.zip,
+        address: this.address,
+        shipment: this.shipment,
+      };
+      const totals = {
+        subtotal: this.getSubTotal,
+        shipment: +this.shipment,
+        total: this.finalTotal,
+      };
+      this.save_Cart({ address, totals });
     },
   },
 };

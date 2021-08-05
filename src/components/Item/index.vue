@@ -27,7 +27,7 @@
             <span> ${{ item.price }} </span>
           </p>
 
-          <div class="pl-4 mt-5 d-flex">
+          <div class="pl-4 mt-5 d-flex" v-if="getUser">
             <v-btn
               class="mx-2"
               fab
@@ -55,6 +55,7 @@
             rounded
             color="error"
             @click="addToCart"
+            v-if="getUser"
           >
             Agregar al Carrito
           </v-btn>
@@ -96,7 +97,7 @@ export default {
     ],
   }),
   computed: {
-    ...mapGetters(['getItem']),
+    ...mapGetters(['getUser', 'getItem']),
   },
   methods: {
     ...mapActions(['add_To_Cart']),

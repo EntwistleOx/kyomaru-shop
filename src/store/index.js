@@ -19,6 +19,8 @@ export default new Vuex.Store({
     shiping: shiping,
     snack: {},
     drawer: false,
+    dialog: false,
+    order: {},
   },
   mutations: {
     SET_USER(state, user) {
@@ -48,6 +50,12 @@ export default new Vuex.Store({
     SHOW_SNACK(state, snack) {
       state.snack = snack;
     },
+    SHOW_DIALOG(state, dialog) {
+      state.dialog = dialog;
+    },
+    SET_ORDER(state, order) {
+      state.order = order;
+    },
   },
   actions: {
     show_Drawer({ commit }, drawer) {
@@ -55,6 +63,9 @@ export default new Vuex.Store({
     },
     show_Snack({ commit }, snack) {
       commit('SHOW_SNACK', snack);
+    },
+    show_Dialog({ commit }, dialog) {
+      commit('SHOW_DIALOG', dialog);
     },
     register({ commit }, { name, lastName, rut, phone, email, password }) {
       firebase
@@ -81,6 +92,7 @@ export default new Vuex.Store({
                 color: 'success',
               };
               commit('SHOW_SNACK', snack);
+              commit('SHOW_DIALOG', false);
             })
             .catch((error) => {
               const snack = {
@@ -111,6 +123,7 @@ export default new Vuex.Store({
             color: 'success',
           };
           commit('SHOW_SNACK', snack);
+          commit('SHOW_DIALOG', false);
         })
         .catch((error) => {
           const snack = {
@@ -147,8 +160,16 @@ export default new Vuex.Store({
             .doc(uid)
             .get()
             .then((doc) => {
-              doc.data();
-              commit('SET_USER', doc.data());
+              userCredential.getIdTokenResult().then((idTokenResult) => {
+                const admin = idTokenResult.claims.admin;
+                if (admin) {
+                  const user = { ...doc.data(), id: doc.id, admin };
+                  commit('SET_USER', user);
+                } else {
+                  const user = { ...doc.data(), id: doc.id };
+                  commit('SET_USER', user);
+                }
+              });
             })
             .catch(() => commit('SET_USER', null));
         } else {
@@ -178,10 +199,83 @@ export default new Vuex.Store({
     delete_Item_From_Cart({ commit }, id) {
       commit('DELETE_FROM_CART', id);
     },
+    save_Cart({ commit, state: { user, cart } }, { address, totals }) {
+      const userId = user.id;
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(userId)
+        .collection('orders')
+        .add({ address, cart, totals })
+        .then((doc) => {
+          // return { userId, orderId: doc.id };
+          window.location = `http://localhost:5000/api/v1/tbk/?userId=${userId}&orderId=${doc.id}&amount=${totals.total}`;
+        })
+        .catch((error) => {
+          const snack = {
+            show: true,
+            text: error.message,
+            color: 'error',
+          };
+          commit('SHOW_SNACK', snack);
+        });
+    },
+    get_Order({ commit }, { userId, orderId }) {
+      firebase
+        .firestore()
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then((doc) => {
+          const user = doc.data();
+          firebase
+            .firestore()
+            .collection('users')
+            .doc(userId)
+            .collection('orders')
+            .doc(orderId)
+            .get()
+            .then((doc) => {
+              const { address, totals, cart, payment } = doc.data();
+              const order = {
+                user,
+                address,
+                totals,
+                cart,
+                paymentStatus: payment.status,
+              };
+              commit('SET_ORDER', order);
+            })
+            .catch((error) => {
+              console.log(error);
+              const snack = {
+                show: true,
+                text: error.message,
+                color: 'error',
+              };
+              commit('SHOW_SNACK', snack);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          const snack = {
+            show: true,
+            text: error.message,
+            color: 'error',
+          };
+          commit('SHOW_SNACK', snack);
+        });
+    },
   },
   getters: {
     snackbar: ({ snack }) => {
       return snack;
+    },
+    getUser: ({ user }) => {
+      return user;
+    },
+    getDialog: ({ dialog }) => {
+      return dialog;
     },
     getProducts: ({ products }) => {
       return products;
@@ -194,6 +288,9 @@ export default new Vuex.Store({
     },
     getShiping: ({ shiping }) => {
       return shiping;
+    },
+    getOrder: ({ order }) => {
+      return order;
     },
     getItem:
       ({ products }) =>
