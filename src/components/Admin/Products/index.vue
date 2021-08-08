@@ -425,8 +425,8 @@ export default {
     ...mapActions([
       'fetch_Products',
       'fetch_Categories',
-      'delete_Category',
-      'update_Category',
+      'delete_Product',
+      'update_Product',
       'add_Product',
     ]),
 
@@ -451,7 +451,7 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.delete_Category({
+      this.delete_Product({
         id: this.editedIndex,
         storage: this.photoStorage,
       });
@@ -478,9 +478,9 @@ export default {
       this.$v.$touch();
       if (this.editedIndex) {
         if (!this.$v.$invalid) {
-          this.update_Category({
+          this.update_Product({
             id: this.editedIndex,
-            category: { ...this.editedItem, photoStorage: this.photoStorage },
+            product: { ...this.editedItem, photoStorage: this.photoStorage },
           });
           this.close();
         }

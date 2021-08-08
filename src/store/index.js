@@ -456,6 +456,110 @@ export default new Vuex.Store({
         });
       });
     },
+    update_Product({ commit }, { id, product }) {
+      if (!product.photo) {
+        const data = { ...product };
+        delete data.photo;
+        delete data.photoStorage;
+        firebase
+          .firestore()
+          .collection('products')
+          .doc(id)
+          .update(data)
+          .then(() => {
+            const snack = {
+              show: true,
+              text: 'Producto editado con exito.',
+              color: 'success',
+            };
+            commit('SHOW_SNACK', snack);
+          });
+      } else {
+        const {
+          photo,
+          photo: { name },
+        } = product;
+        const storageRef = firebase.storage().ref();
+        const fileRef = storageRef.child(`products/${name}`);
+        fileRef.put(photo).then(() => {
+          fileRef.getDownloadURL().then((url) => {
+            // const data = {
+            //   name: product.name,
+            //   photo: { url, storage: `products/${name}` },
+            // };
+
+            const data = {
+              ...product,
+              photo: { url, storage: `products/${name}` },
+            };
+            // data.photo = { url, storage: `products/${name}` };
+            delete data.photoStorage;
+            firebase
+              .firestore()
+              .collection('products')
+              .doc(id)
+              .update(data)
+              .then(() => {
+                const productRef = storageRef.child(product.photoStorage);
+                productRef
+                  .delete()
+                  .then(function () {
+                    const snack = {
+                      show: true,
+                      text: 'Producto editado con exito.',
+                      color: 'success',
+                    };
+                    commit('SHOW_SNACK', snack);
+                  })
+                  .catch(function (error) {
+                    const snack = {
+                      show: true,
+                      text: error.message,
+                      color: 'error',
+                    };
+                    commit('SHOW_SNACK', snack);
+                  });
+              });
+          });
+        });
+      }
+    },
+    delete_Product({ commit }, { id, storage }) {
+      firebase
+        .firestore()
+        .collection('products')
+        .doc(id)
+        .delete()
+        .then(() => {
+          const storageRef = firebase.storage().ref();
+          const productRef = storageRef.child(storage);
+          productRef
+            .delete()
+            .then(function () {
+              const snack = {
+                show: true,
+                text: 'Producto eliminado con exito.',
+                color: 'success',
+              };
+              commit('SHOW_SNACK', snack);
+            })
+            .catch(function (error) {
+              const snack = {
+                show: true,
+                text: error.message,
+                color: 'error',
+              };
+              commit('SHOW_SNACK', snack);
+            });
+        });
+      const snack = {
+        show: true,
+        text: 'Curso eliminado con exito.',
+        color: 'success',
+      };
+      commit('SHOW_SNACK', snack);
+    },
+    // USERS
   },
   getters: {
     snackbar: ({ snack }) => {
