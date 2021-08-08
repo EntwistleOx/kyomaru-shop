@@ -3,7 +3,7 @@
     <Menu />
     <v-data-table
       :headers="headers"
-      :items="getCategories"
+      :items="getProducts"
       :items-per-page="5"
       class="elevation-1"
       loading-text="Cargando..."
@@ -42,8 +42,10 @@
                     <v-col cols="12">
                       <v-switch
                         v-model="editedItem.state"
-                        label="Estado"
-                        :error-messages="nameErrors"
+                        :label="`Estado: ${
+                          editedItem.state ? 'Activo' : 'Desactivo'
+                        }`"
+                        :error-messages="stateErrors"
                         required
                         @input="$v.editedItem.state.$touch()"
                         @blur="$v.editedItem.state.$touch()"
@@ -55,7 +57,7 @@
                       <v-textarea
                         v-model="editedItem.description"
                         label="Descripcion"
-                        :error-messages="nameErrors"
+                        :error-messages="descriptionErrors"
                         required
                         @input="$v.editedItem.description.$touch()"
                         @blur="$v.editedItem.description.$touch()"
@@ -67,7 +69,7 @@
                       <v-text-field
                         v-model="editedItem.price"
                         label="Precio"
-                        :error-messages="nameErrors"
+                        :error-messages="priceErrors"
                         required
                         @input="$v.editedItem.price.$touch()"
                         @blur="$v.editedItem.price.$touch()"
@@ -82,7 +84,7 @@
                         label="Categorias"
                         multiple
                         chips
-                        :error-messages="nameErrors"
+                        :error-messages="categoriesErrors"
                         required
                         @input="$v.editedItem.name.$touch()"
                         @blur="$v.editedItem.name.$touch()"
@@ -91,25 +93,40 @@
                   </v-row>
                   <v-row>
                     <v-col cols="12">
+                      <label class="v-label theme--light mb-0">
+                        Dimenciones
+                      </label>
+                    </v-col>
+                    <v-col cols="6">
                       <v-text-field
-                        v-model="editedItem.name"
-                        label="Nombre"
-                        :error-messages="nameErrors"
+                        v-model="editedItem.dimensions.height"
+                        label="Alto (cm)"
+                        :error-messages="heightErrors"
                         required
-                        @input="$v.editedItem.name.$touch()"
-                        @blur="$v.editedItem.name.$touch()"
+                        @input="$v.editedItem.dimensions.height.$touch()"
+                        @blur="$v.editedItem.dimensions.height.$touch()"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="editedItem.dimensions.width"
+                        label="Ancho (cm)"
+                        :error-messages="widthErrors"
+                        required
+                        @input="$v.editedItem.dimensions.width.$touch()"
+                        @blur="$v.editedItem.dimensions.width.$touch()"
                       ></v-text-field>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.name"
-                        label="Nombre"
-                        :error-messages="nameErrors"
+                        v-model="editedItem.weight"
+                        label="Peso"
+                        :error-messages="weightErrors"
                         required
-                        @input="$v.editedItem.name.$touch()"
-                        @blur="$v.editedItem.name.$touch()"
+                        @input="$v.editedItem.weight.$touch()"
+                        @blur="$v.editedItem.weight.$touch()"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -176,6 +193,9 @@
           </v-dialog>
         </v-toolbar>
       </template>
+      <template v-slot:[`item.dimensions`]="{ item }">
+        {{ `${item.dimensions.height}cmX${item.dimensions.width}cm` }}
+      </template>
       <template v-slot:[`item.photo`]="{ item }">
         <v-img
           :src="item.photo.url"
@@ -196,11 +216,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { validationMixin } from "vuelidate";
-import { required, requiredIf } from "vuelidate/lib/validators";
+import { mapActions, mapGetters } from 'vuex';
+import { validationMixin } from 'vuelidate';
+import { required, requiredIf } from 'vuelidate/lib/validators';
 
-import Menu from "@/components/Admin/Menu";
+import Menu from '@/components/Admin/Menu';
 
 export default {
   components: {
@@ -208,63 +228,73 @@ export default {
   },
   data: () => ({
     changePhoto: false,
-    photoUrl: "",
-    photoStorage: "",
+    photoUrl: '',
+    photoStorage: '',
     disable: true,
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: "Nombre",
-        align: "start",
+        text: 'Nombre',
+        align: 'start',
         sortable: false,
-        value: "name",
+        value: 'name',
       },
       {
-        text: "Estado",
-        value: "state",
+        text: 'Estado',
+        value: 'state',
       },
       {
-        text: "Descripcion",
-        value: "description",
+        text: 'Descripcion',
+        value: 'description',
       },
       {
-        text: "Precio",
-        value: "price",
+        text: 'Precio',
+        value: 'price',
       },
       {
-        text: "Categorias",
-        value: "categories",
+        text: 'Categorias',
+        value: 'categories',
       },
       {
-        text: "Dimensiones",
-        value: "dimensions",
+        text: 'Dimensiones',
+        value: 'dimensions',
       },
       {
-        text: "Peso",
-        value: "weight",
+        text: 'Peso',
+        value: 'weight',
       },
-      { text: "Actions", value: "actions", sortable: false },
+      {
+        text: 'Foto',
+        value: 'photo',
+      },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
     editedIndex: null,
     editedItem: {
-      name: "",
+      name: '',
       state: false,
-      description: "",
-      price: "",
+      description: '',
+      price: '',
       categories: [],
-      dimensions: {},
-      weight: "",
+      dimensions: {
+        height: '',
+        width: '',
+      },
+      weight: '',
       photo: null,
     },
     defaultItem: {
-      name: "",
+      name: '',
       state: false,
-      description: "",
-      price: "",
+      description: '',
+      price: '',
       categories: [],
-      dimensions: {},
-      weight: "",
+      dimensions: {
+        height: '',
+        width: '',
+      },
+      weight: '',
       photo: null,
     },
   }),
@@ -273,6 +303,15 @@ export default {
   validations: {
     editedItem: {
       name: { required },
+      state: { required },
+      description: { required },
+      price: { required },
+      categories: { required },
+      dimensions: {
+        height: { required },
+        width: { required },
+      },
+      weight: { required },
       photo: {
         required: requiredIf(function () {
           if (!this.editedIndex) {
@@ -290,20 +329,73 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getCategories"]),
+    ...mapGetters(['getProducts', 'getCategories']),
 
     categories() {
       return this.getCategories.map((cat) => cat.name);
     },
 
     formTitle() {
-      return !this.editedIndex ? "Nuevo Producto" : "Editar Producto";
+      return !this.editedIndex ? 'Nuevo Producto' : 'Editar Producto';
     },
 
     nameErrors() {
       let errors = [];
       if (!this.$v.editedItem.name.$dirty) return errors;
-      !this.$v.editedItem.name.required && errors.push("Nombre es requerido.");
+      !this.$v.editedItem.name.required && errors.push('Nombre es requerido.');
+      return errors;
+    },
+
+    stateErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.state.$dirty) return errors;
+      !this.$v.editedItem.state.required && errors.push('Estado es requerido.');
+      return errors;
+    },
+
+    descriptionErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.description.$dirty) return errors;
+      !this.$v.editedItem.description.required &&
+        errors.push('Descripcion es requerida.');
+      return errors;
+    },
+
+    priceErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.price.$dirty) return errors;
+      !this.$v.editedItem.price.required && errors.push('Precio es requerido.');
+      return errors;
+    },
+
+    categoriesErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.categories.$dirty) return errors;
+      !this.$v.editedItem.categories.required &&
+        errors.push('Categorias es requerido.');
+      return errors;
+    },
+
+    heightErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.dimensions.height.$dirty) return errors;
+      !this.$v.editedItem.dimensions.height.required &&
+        errors.push('Altura es requerida.');
+      return errors;
+    },
+
+    widthErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.dimensions.width.$dirty) return errors;
+      !this.$v.editedItem.dimensions.width.required &&
+        errors.push('Anchura es requerida.');
+      return errors;
+    },
+
+    weightErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.weight.$dirty) return errors;
+      !this.$v.editedItem.weight.required && errors.push('Peso es requerida.');
       return errors;
     },
 
@@ -311,7 +403,7 @@ export default {
       let errors = [];
       if (!this.$v.editedItem.photo.$dirty) return errors;
       !this.$v.editedItem.photo.required &&
-        errors.push("La Imagen es requerida.");
+        errors.push('La Imagen es requerida.');
       return errors;
     },
   },
@@ -331,13 +423,15 @@ export default {
 
   methods: {
     ...mapActions([
-      "fetch_Categories",
-      "delete_Category",
-      "update_Category",
-      "add_Category",
+      'fetch_Products',
+      'fetch_Categories',
+      'delete_Category',
+      'update_Category',
+      'add_Product',
     ]),
 
     initialize() {
+      this.fetch_Products();
       this.fetch_Categories();
     },
 
@@ -392,7 +486,7 @@ export default {
         }
       } else {
         if (!this.$v.$invalid) {
-          this.add_Category(this.editedItem);
+          this.add_Product(this.editedItem);
           this.close();
         }
       }

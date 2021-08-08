@@ -66,41 +66,41 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   data: () => ({
     item: {
-      id: "",
-      name: "",
-      description: "",
-      photo: "",
-      price: "",
+      id: '',
+      name: '',
+      description: '',
+      photo: '',
+      price: '',
       quantity: 1,
     },
     items: [
       {
-        text: "Inicio",
+        text: 'Inicio',
         disabled: false,
-        href: "/",
+        href: '/',
       },
       {
-        text: "Ceremonia del Te",
+        text: 'Ceremonia del Te',
         disabled: false,
-        href: "busqueda",
+        href: 'busqueda',
       },
       {
-        text: "Set Ceremonia del Te",
+        text: 'Set Ceremonia del Te',
         disabled: true,
-        href: "",
+        href: '',
       },
     ],
   }),
   computed: {
-    ...mapGetters(["getUser", "getItem"]),
+    ...mapGetters(['getUser', 'getItem']),
   },
   methods: {
-    ...mapActions(["add_To_Cart"]),
+    ...mapActions(['add_To_Cart']),
     add() {
       this.item.quantity >= 10 ? this.item.quantity : this.item.quantity++;
     },
@@ -114,10 +114,11 @@ export default {
   created() {
     // created
     const result = this.getItem(this.$route.params.id);
+    console.log(result);
     this.item.id = result.id;
     this.item.name = result.name;
     this.item.description = result.description;
-    this.item.photo = result.photo;
+    this.item.photo = result.photo.url;
     this.item.price = result.price;
   },
 };

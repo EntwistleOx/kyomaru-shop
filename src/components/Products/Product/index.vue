@@ -12,7 +12,7 @@
         <router-link :to="`/producto/${product.id}`">
           <v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 16 : 2" :class="{ 'on-hover': hover }">
-              <v-img :src="product.photo" height="300px"></v-img>
+              <v-img :src="product.photo.url" height="300px"></v-img>
               <v-card-title>{{ product.name }}</v-card-title>
               <v-card-text>
                 <div class="text-subtitle-1">
@@ -29,8 +29,8 @@
 
 <script>
 export default {
-  name: "Product",
-  props: ["products"],
+  name: 'Product',
+  props: ['products'],
   data: () => ({}),
 };
 </script>

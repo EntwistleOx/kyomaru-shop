@@ -7,14 +7,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
-import Hero from "@/components/Hero";
-import Products from "@/components/Products";
-import Categories from "@/components/Categories";
+import Hero from '@/components/Hero';
+import Products from '@/components/Products';
+import Categories from '@/components/Categories';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Hero,
     Products,
@@ -22,14 +22,15 @@ export default {
   },
   data: () => ({}),
   mounted() {
-    this.fetchCategories();
+    this.initialize();
   },
 
   methods: {
-    ...mapActions(["fetch_Categories"]),
+    ...mapActions(['fetch_Categories', 'fetch_Products']),
 
-    fetchCategories() {
+    initialize() {
       this.fetch_Categories();
+      this.fetch_Products();
     },
   },
 };

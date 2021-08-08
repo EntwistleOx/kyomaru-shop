@@ -4,7 +4,7 @@
       <v-card>
         <div class="d-flex">
           <v-avatar class="ma-3" size="125" tile>
-            <v-img :src="item.photo"></v-img>
+            <v-img :src="item.photo.url"></v-img>
           </v-avatar>
           <div>
             <v-card-title class="text-h6">
@@ -87,19 +87,19 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: "Cart",
+  name: 'Cart',
   data: () => ({}),
   computed: {
-    ...mapGetters(["getCart", "getSubTotal"]),
+    ...mapGetters(['getCart', 'getSubTotal']),
   },
   methods: {
     ...mapActions([
-      "add_Item_Quantity",
-      "substract_Item_Quantity",
-      "delete_Item_From_Cart",
+      'add_Item_Quantity',
+      'substract_Item_Quantity',
+      'delete_Item_From_Cart',
     ]),
     add(id) {
       this.add_Item_Quantity(id);
