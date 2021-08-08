@@ -59,9 +59,9 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: "Footer",
   data: () => ({
-    icons: ['mdi-facebook', 'mdi-instagram', 'mdi-youtube'],
+    icons: ["mdi-facebook", "mdi-instagram", "mdi-youtube"],
   }),
 };
 </script>

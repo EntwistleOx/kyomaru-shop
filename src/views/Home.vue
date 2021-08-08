@@ -7,19 +7,30 @@
 </template>
 
 <script>
-import Hero from '@/components/Hero';
-import Products from '@/components/Products';
-import Categories from '@/components/Categories';
+import { mapActions } from "vuex";
+
+import Hero from "@/components/Hero";
+import Products from "@/components/Products";
+import Categories from "@/components/Categories";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Hero,
     Products,
     Categories,
   },
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
+  mounted() {
+    this.fetchCategories();
+  },
+
+  methods: {
+    ...mapActions(["fetch_Categories"]),
+
+    fetchCategories() {
+      this.fetch_Categories();
+    },
+  },
 };
 </script>

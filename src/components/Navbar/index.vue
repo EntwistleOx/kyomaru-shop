@@ -69,6 +69,12 @@
             </v-list-item>
           </v-list>
 
+          <v-list v-if="getUser.admin">
+            <v-list-item to="/admin/home">
+              <v-list-item-title>Admin</v-list-item-title>
+            </v-list-item>
+          </v-list>
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" text @click="sign_Out"> Salir </v-btn>
@@ -122,11 +128,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import Dialog from './Dialog';
+import { mapActions, mapGetters } from "vuex";
+import Dialog from "./Dialog";
 
 export default {
-  name: 'Navbar',
+  name: "Navbar",
   components: {
     Dialog,
   },
@@ -138,7 +144,7 @@ export default {
     hints: true,
   }),
   methods: {
-    ...mapActions(['show_Dialog', 'sign_Out']),
+    ...mapActions(["show_Dialog", "sign_Out"]),
     setTab(value) {
       this.tab = value;
     },
@@ -148,7 +154,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getUser', 'getTotalCountInCart']),
+    ...mapGetters(["getUser", "getTotalCountInCart"]),
     name() {
       return `${this.getUser.name} ${this.getUser.lastName}`;
     },
@@ -157,10 +163,10 @@ export default {
     },
     avatar() {
       return this.getUser.name
-        ? `${this.getUser.name.split('')[0]}${
-            this.getUser.lastName.split('')[0]
+        ? `${this.getUser.name.split("")[0]}${
+            this.getUser.lastName.split("")[0]
           }`
-        : '';
+        : "";
     },
   },
 };

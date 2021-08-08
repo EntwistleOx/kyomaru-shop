@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import Menu from '@/components/Admin/Menu';
+import Menu from "@/components/Admin/Menu";
 
 export default {
   components: {
@@ -109,28 +109,28 @@ export default {
     dialogDelete: false,
     headers: [
       {
-        text: 'ID',
-        align: 'start',
+        text: "ID",
+        align: "start",
         sortable: false,
-        value: 'id',
+        value: "id",
       },
-      { text: 'Monto', value: 'amount' },
-      { text: 'Cliente', value: 'name' },
-      { text: 'Actions', value: 'actions', sortable: false },
+      { text: "Monto", value: "amount" },
+      { text: "Cliente", value: "name" },
+      { text: "Actions", value: "actions", sortable: false },
     ],
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      name: '',
+      name: "",
     },
     defaultItem: {
-      name: '',
+      name: "",
     },
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'Nuevo Producto' : 'Editar Producto';
+      return this.editedIndex === -1 ? "Nuevo Producto" : "Editar Producto";
     },
   },
 
@@ -152,112 +152,112 @@ export default {
       this.desserts = [
         {
           id: 1,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 2,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 3,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 4,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 5,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 6,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 7,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 8,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 9,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 10,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 11,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 12,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 13,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 14,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 15,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 16,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 17,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 18,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 19,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 20,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 21,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
         {
           id: 22,
-          name: 'John Doe',
+          name: "John Doe",
           amount: 147100,
         },
       ];

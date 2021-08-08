@@ -3,9 +3,10 @@
     <Menu />
     <v-data-table
       :headers="headers"
-      :items="desserts"
-      sort-by="calories"
+      :items="getCategories"
+      :items-per-page="5"
       class="elevation-1"
+      loading-text="Cargando..."
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -30,31 +31,115 @@
                       <v-text-field
                         v-model="editedItem.name"
                         label="Nombre"
+                        :error-messages="nameErrors"
+                        required
+                        @input="$v.editedItem.name.$touch()"
+                        @blur="$v.editedItem.name.$touch()"
                       ></v-text-field>
                     </v-col>
+                  </v-row>
+                  <v-row>
                     <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.price"
-                        label="Precio"
-                      ></v-text-field>
+                      <v-switch
+                        v-model="editedItem.state"
+                        label="Estado"
+                        :error-messages="nameErrors"
+                        required
+                        @input="$v.editedItem.state.$touch()"
+                        @blur="$v.editedItem.state.$touch()"
+                      ></v-switch>
                     </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.category"
-                        label="Categoria"
-                      ></v-text-field>
-                    </v-col>
+                  </v-row>
+                  <v-row>
                     <v-col cols="12">
                       <v-textarea
                         v-model="editedItem.description"
                         label="Descripcion"
+                        :error-messages="nameErrors"
+                        required
+                        @input="$v.editedItem.description.$touch()"
+                        @blur="$v.editedItem.description.$touch()"
                       ></v-textarea>
                     </v-col>
+                  </v-row>
+                  <v-row>
                     <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.price"
+                        label="Precio"
+                        :error-messages="nameErrors"
+                        required
+                        @input="$v.editedItem.price.$touch()"
+                        @blur="$v.editedItem.price.$touch()"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-select
+                        v-model="editedItem.categories"
+                        :items="categories"
+                        label="Categorias"
+                        multiple
+                        chips
+                        :error-messages="nameErrors"
+                        required
+                        @input="$v.editedItem.name.$touch()"
+                        @blur="$v.editedItem.name.$touch()"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.name"
+                        label="Nombre"
+                        :error-messages="nameErrors"
+                        required
+                        @input="$v.editedItem.name.$touch()"
+                        @blur="$v.editedItem.name.$touch()"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="editedItem.name"
+                        label="Nombre"
+                        :error-messages="nameErrors"
+                        required
+                        @input="$v.editedItem.name.$touch()"
+                        @blur="$v.editedItem.name.$touch()"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-img
+                        v-if="editedIndex && !changePhoto"
+                        :src="photoUrl"
+                        aspect-ratio="1"
+                        max-height="100"
+                        max-width="100"
+                      />
+                      <v-switch
+                        v-if="editedIndex"
+                        v-model="changePhoto"
+                        label="Cambiar Imagen"
+                      ></v-switch>
                       <v-file-input
+                        v-if="changePhoto || !editedIndex"
                         accept="image/*"
+                        prepend-icon="mdi-camera"
+                        chips
+                        show-size
+                        counter
                         v-model="editedItem.photo"
-                        label="Foto"
+                        label="Imagen"
+                        :error-messages="photoErrors"
+                        required
+                        @input="$v.editedItem.photo.$touch()"
+                        @blur="$v.editedItem.photo.$touch()"
                       ></v-file-input>
                     </v-col>
                   </v-row>
@@ -75,7 +160,7 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h6"
-                >¿Seguro que quieres eliminar esta categoria?</v-card-title
+                >¿Seguro que quieres eliminar este producto?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -91,53 +176,143 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:[`item.photo`]="{ item }">
+        <v-img
+          :src="item.photo.url"
+          aspect-ratio="1"
+          max-height="80"
+          max-width="80"
+        ></v-img>
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
+        <v-btn color="primary" @click="initialize"> Recargar </v-btn>
       </template>
     </v-data-table>
   </v-container>
 </template>
 
 <script>
-import Menu from '@/components/Admin/Menu';
+import { mapActions, mapGetters } from "vuex";
+import { validationMixin } from "vuelidate";
+import { required, requiredIf } from "vuelidate/lib/validators";
+
+import Menu from "@/components/Admin/Menu";
 
 export default {
   components: {
     Menu,
   },
   data: () => ({
+    changePhoto: false,
+    photoUrl: "",
+    photoStorage: "",
+    disable: true,
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: 'Nombre',
-        align: 'start',
+        text: "Nombre",
+        align: "start",
         sortable: false,
-        value: 'name',
+        value: "name",
       },
-      { text: 'Precio', value: 'price' },
-      // { text: 'Descripcion', value: 'description' },
-      { text: 'Category', value: 'category' },
-      { text: 'Foto', value: 'photo' },
-      { text: 'Actions', value: 'actions', sortable: false },
+      {
+        text: "Estado",
+        value: "state",
+      },
+      {
+        text: "Descripcion",
+        value: "description",
+      },
+      {
+        text: "Precio",
+        value: "price",
+      },
+      {
+        text: "Categorias",
+        value: "categories",
+      },
+      {
+        text: "Dimensiones",
+        value: "dimensions",
+      },
+      {
+        text: "Peso",
+        value: "weight",
+      },
+      { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
-    editedIndex: -1,
+    editedIndex: null,
     editedItem: {
-      name: '',
+      name: "",
+      state: false,
+      description: "",
+      price: "",
+      categories: [],
+      dimensions: {},
+      weight: "",
+      photo: null,
     },
     defaultItem: {
-      name: '',
+      name: "",
+      state: false,
+      description: "",
+      price: "",
+      categories: [],
+      dimensions: {},
+      weight: "",
+      photo: null,
     },
   }),
 
+  mixins: [validationMixin],
+  validations: {
+    editedItem: {
+      name: { required },
+      photo: {
+        required: requiredIf(function () {
+          if (!this.editedIndex) {
+            return true;
+          } else {
+            if (this.changePhoto) {
+              return true;
+            } else {
+              return false;
+            }
+          }
+        }),
+      },
+    },
+  },
+
   computed: {
+    ...mapGetters(["getCategories"]),
+
+    categories() {
+      return this.getCategories.map((cat) => cat.name);
+    },
+
     formTitle() {
-      return this.editedIndex === -1 ? 'Nuevo Producto' : 'Editar Producto';
+      return !this.editedIndex ? "Nuevo Producto" : "Editar Producto";
+    },
+
+    nameErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.name.$dirty) return errors;
+      !this.$v.editedItem.name.required && errors.push("Nombre es requerido.");
+      return errors;
+    },
+
+    photoErrors() {
+      let errors = [];
+      if (!this.$v.editedItem.photo.$dirty) return errors;
+      !this.$v.editedItem.photo.required &&
+        errors.push("La Imagen es requerida.");
+      return errors;
     },
   },
 
@@ -150,474 +325,77 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
+  mounted() {
+    this.editedItem = { ...this.defaultItem };
   },
 
   methods: {
+    ...mapActions([
+      "fetch_Categories",
+      "delete_Category",
+      "update_Category",
+      "add_Category",
+    ]),
+
     initialize() {
-      this.desserts = [
-        {
-          id: 1,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 2,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 3,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 4,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 5,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 6,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 7,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 8,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 9,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 10,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 11,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 12,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 13,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 14,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 15,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 16,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 17,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 18,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 19,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 20,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 21,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-        {
-          id: 22,
-          name: 'Set Ceremonia del te',
-          price: 147100,
-          photo: 'sampler.jpg',
-          category: 'Ceremonia del Te',
-          description:
-            'El set incluye:\
-          Bandeja de la escuela URASENKE circular, material Lacado\
-          Batidor CHASEN\
-          Cucharita medidor CHASHAKU\
-          Envase para guardar el té NATSUME\
-          Bowl para tomar té Matcha CHAWAN Tradicional\
-          Corte de tela para limpiar los implementos CHAKIN\
-          Bolsa de Té Matcha 20gr. calidad premium\
-          Incienso Shoyeido Xiang Do de 20 Palitos con base portainciensos\
-          EL CHAWAN y EL TE de la foto son REFERENCIALES ya que dependemos del STOCK en el momento de la compra. \
-          Al realizar su pedido le enviaremos fotos de ambos productos en stock para tener su aprobación.',
-        },
-      ];
+      this.fetch_Categories();
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedIndex = item.id;
+      this.editedItem = { ...item };
+      this.photoUrl = this.editedItem.photo.url;
+      this.photoStorage = this.editedItem.photo.storage;
+      this.editedItem.photo = null;
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedIndex = item.id;
+      this.photoStorage = item.photo.storage;
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.delete_Category({
+        id: this.editedIndex,
+        storage: this.photoStorage,
+      });
       this.closeDelete();
     },
 
     close() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = null;
       });
     },
 
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.editedItem = { ...this.defaultItem };
+        this.editedIndex = null;
       });
     },
 
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      this.$v.$touch();
+      if (this.editedIndex) {
+        if (!this.$v.$invalid) {
+          this.update_Category({
+            id: this.editedIndex,
+            category: { ...this.editedItem, photoStorage: this.photoStorage },
+          });
+          this.close();
+        }
       } else {
-        this.desserts.push(this.editedItem);
+        if (!this.$v.$invalid) {
+          this.add_Category(this.editedItem);
+          this.close();
+        }
       }
-      this.close();
     },
   },
 };

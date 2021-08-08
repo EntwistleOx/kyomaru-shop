@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import Login from '@/components/Admin/Login';
+import Login from "@/components/Admin/Login";
 
 export default {
-  name: 'AdminLogin',
+  name: "AdminLogin",
   components: {
     Login,
   },

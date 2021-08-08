@@ -29,8 +29,8 @@
 
 <script>
 export default {
-  name: 'Product',
-  props: ['products'],
+  name: "Product",
+  props: ["products"],
   data: () => ({}),
 };
 </script>

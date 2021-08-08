@@ -23,16 +23,16 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
 // Components
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 // import Drawer from '@/components/Drawer';
-import Snackbar from '@/components/Snackbar';
+import Snackbar from "@/components/Snackbar";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Navbar,
     Footer,
@@ -46,7 +46,7 @@ export default {
     this.auth_State_Change();
   },
   methods: {
-    ...mapActions(['auth_State_Change']),
+    ...mapActions(["auth_State_Change"]),
   },
 };
 </script>

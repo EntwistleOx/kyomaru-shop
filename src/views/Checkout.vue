@@ -242,16 +242,16 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { validationMixin } from 'vuelidate';
+import { mapGetters, mapActions } from "vuex";
+import { validationMixin } from "vuelidate";
 import {
   required,
   email,
   minLength,
   maxLength,
   numeric,
-} from 'vuelidate/lib/validators';
-import { validate } from 'rut.js';
+} from "vuelidate/lib/validators";
+import { validate } from "rut.js";
 
 const validateRut = (value) => validate(value);
 
@@ -259,17 +259,17 @@ export default {
   data() {
     return {
       step: 1,
-      name: '',
-      lastName: '',
-      rut: '',
-      phone: '',
-      email: '',
-      country: 'Chile',
-      region: '',
-      commune: '',
-      zip: '',
-      address: '',
-      shipment: '',
+      name: "",
+      lastName: "",
+      rut: "",
+      phone: "",
+      email: "",
+      country: "Chile",
+      region: "",
+      commune: "",
+      zip: "",
+      address: "",
+      shipment: "",
     };
   },
   mixins: [validationMixin],
@@ -315,11 +315,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getUser',
-      'getCart',
-      'getSubTotal',
-      'getRegions',
-      'getShiping',
+      "getUser",
+      "getCart",
+      "getSubTotal",
+      "getRegions",
+      "getShiping",
     ]),
     finalTotal() {
       return this.getSubTotal + +this.shipment;
@@ -337,75 +337,75 @@ export default {
     nameErrors() {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
-      !this.$v.name.required && errors.push('El Nombre es requerido.');
+      !this.$v.name.required && errors.push("El Nombre es requerido.");
       return errors;
     },
     lastNameErrors() {
       const errors = [];
       if (!this.$v.lastName.$dirty) return errors;
-      !this.$v.lastName.required && errors.push('El Apellido es requerido.');
+      !this.$v.lastName.required && errors.push("El Apellido es requerido.");
       return errors;
     },
     rutErrors() {
       const errors = [];
       if (!this.$v.rut.$dirty) return errors;
-      !this.$v.rut.required && errors.push('El RUT es requerido.');
-      !this.$v.rut.validateRut && errors.push('El RUT es invalido.');
+      !this.$v.rut.required && errors.push("El RUT es requerido.");
+      !this.$v.rut.validateRut && errors.push("El RUT es invalido.");
       return errors;
     },
     phoneErrors() {
       const errors = [];
       if (!this.$v.phone.$dirty) return errors;
-      !this.$v.phone.required && errors.push('El Telefono es requerido.');
+      !this.$v.phone.required && errors.push("El Telefono es requerido.");
       !this.$v.phone.numeric &&
-        errors.push('El Telefono debe ser de valor numerico.');
+        errors.push("El Telefono debe ser de valor numerico.");
       !this.$v.phone.minLength &&
-        errors.push('El largo minimo del Telefono es 11 caracteres.');
+        errors.push("El largo minimo del Telefono es 11 caracteres.");
       !this.$v.phone.maxLength &&
-        errors.push('El largo maximo del Telefono es 11 caracteres.');
+        errors.push("El largo maximo del Telefono es 11 caracteres.");
       return errors;
     },
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.required && errors.push('El Email es requerido.');
-      !this.$v.email.email && errors.push('El Email es invalido.');
+      !this.$v.email.required && errors.push("El Email es requerido.");
+      !this.$v.email.email && errors.push("El Email es invalido.");
       return errors;
     },
     countryErrors() {
       const errors = [];
       if (!this.$v.country.$dirty) return errors;
-      !this.$v.country.required && errors.push('El Pais es requerido.');
+      !this.$v.country.required && errors.push("El Pais es requerido.");
       return errors;
     },
     regionErrors() {
       const errors = [];
       if (!this.$v.region.$dirty) return errors;
-      !this.$v.region.required && errors.push('La Region es requerida.');
+      !this.$v.region.required && errors.push("La Region es requerida.");
       return errors;
     },
     communeErrors() {
       const errors = [];
       if (!this.$v.commune.$dirty) return errors;
-      !this.$v.commune.required && errors.push('La Comuna es requerida.');
+      !this.$v.commune.required && errors.push("La Comuna es requerida.");
       return errors;
     },
     zipErrors() {
       const errors = [];
       if (!this.$v.zip.$dirty) return errors;
-      !this.$v.zip.required && errors.push('El Codigo postal es requerido.');
+      !this.$v.zip.required && errors.push("El Codigo postal es requerido.");
       return errors;
     },
     addressErrors() {
       const errors = [];
       if (!this.$v.address.$dirty) return errors;
-      !this.$v.address.required && errors.push('La Direccion es requerida.');
+      !this.$v.address.required && errors.push("La Direccion es requerida.");
       return errors;
     },
     shipmentErrors() {
       const errors = [];
       if (!this.$v.shipment.$dirty) return errors;
-      !this.$v.shipment.required && errors.push('El Envio es requerido.');
+      !this.$v.shipment.required && errors.push("El Envio es requerido.");
       return errors;
     },
   },
@@ -413,7 +413,7 @@ export default {
     this.setCheckoutData();
   },
   methods: {
-    ...mapActions(['save_Cart']),
+    ...mapActions(["save_Cart"]),
     setCheckoutData() {
       this.name = this.getUser.name;
       this.lastName = this.getUser.lastName;

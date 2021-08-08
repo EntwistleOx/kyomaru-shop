@@ -48,26 +48,26 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
-import SignIn from './SignIn';
-import Register from './Register';
+import SignIn from "./SignIn";
+import Register from "./Register";
 
 export default {
-  name: 'Dialog',
+  name: "Dialog",
   components: {
     SignIn,
     Register,
   },
-  props: ['tab'],
+  props: ["tab"],
   data: () => ({
-    items: ['Registrate', 'Iniciar Sesion'],
+    items: ["Registrate", "Iniciar Sesion"],
   }),
   computed: {
-    ...mapGetters(['getDialog']),
+    ...mapGetters(["getDialog"]),
   },
   methods: {
-    ...mapActions(['show_Dialog']),
+    ...mapActions(["show_Dialog"]),
     submit() {
       this.$refs.dialog.submit();
     },

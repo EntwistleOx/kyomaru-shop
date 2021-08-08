@@ -80,11 +80,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: 'Product',
-  props: ['userId', 'orderId'],
+  name: "Product",
+  props: ["userId", "orderId"],
   data() {
     return {};
   },
@@ -92,10 +92,10 @@ export default {
     this.setData();
   },
   computed: {
-    ...mapGetters(['getOrder']),
+    ...mapGetters(["getOrder"]),
   },
   methods: {
-    ...mapActions(['get_Order']),
+    ...mapActions(["get_Order"]),
     setData() {
       this.get_Order({ userId: this.userId, orderId: this.orderId });
     },
