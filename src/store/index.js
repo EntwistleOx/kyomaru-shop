@@ -13,6 +13,7 @@ export default new Vuex.Store({
     cart: [],
     products: [],
     categories: [],
+    users: [],
     user: null,
     regions: regions,
     shiping: shiping,
@@ -24,6 +25,9 @@ export default new Vuex.Store({
   mutations: {
     SET_USER(state, user) {
       state.user = user;
+    },
+    SET_USERS(state, users) {
+      state.users = users;
     },
     ADD_TO_CART(state, product) {
       const foundIndex = state.cart.findIndex((item) => item.id === product.id);
@@ -86,6 +90,7 @@ export default new Vuex.Store({
             rut,
             phone,
             email,
+            admin: false,
           };
           firebase
             .firestore()
@@ -560,6 +565,19 @@ export default new Vuex.Store({
       commit('SHOW_SNACK', snack);
     },
     // USERS
+    fetch_Users({ commit }) {
+      firebase
+        .firestore()
+        .collection('users')
+        .where('admin', '==', false)
+        .onSnapshot((snapshot) => {
+          const users = [];
+          snapshot.forEach((doc) => {
+            users.push({ ...doc.data(), id: doc.id });
+          });
+          commit('SET_USERS', users);
+        });
+    },
   },
   getters: {
     snackbar: ({ snack }) => {
@@ -567,6 +585,9 @@ export default new Vuex.Store({
     },
     getUser: ({ user }) => {
       return user;
+    },
+    getUsers: ({ users }) => {
+      return users;
     },
     getDialog: ({ dialog }) => {
       return dialog;
