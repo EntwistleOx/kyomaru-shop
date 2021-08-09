@@ -12,9 +12,12 @@
         absolute
         right
         class="v-btn--whatsapp"
+        target="_blank"
+        href="https://wa.me/56963472861?text=Hola!%20Me%20interesa%20un%20producto%20que%20estás%20vendiendo"
       >
         <v-icon x-large>mdi-whatsapp</v-icon>
       </v-btn>
+
       <router-view />
     </v-main>
 
@@ -23,16 +26,16 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
 // Components
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 // import Drawer from '@/components/Drawer';
-import Snackbar from "@/components/Snackbar";
+import Snackbar from '@/components/Snackbar';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Navbar,
     Footer,
@@ -46,7 +49,7 @@ export default {
     this.auth_State_Change();
   },
   methods: {
-    ...mapActions(["auth_State_Change"]),
+    ...mapActions(['auth_State_Change']),
   },
 };
 </script>
