@@ -12,7 +12,7 @@
           sm="4"
           md="2"
         >
-          <router-link to="/busqueda">
+          <router-link :to="`/buscar?q=${category.name}`">
             <v-hover v-slot="{ hover }">
               <v-card
                 :elevation="hover ? 16 : 2"
@@ -39,14 +39,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "Categories",
+  name: 'Categories',
   data: () => ({}),
   computed: {
-    ...mapGetters(["getCategories"]),
+    ...mapGetters(['getCategories']),
   },
+  methods: {},
 };
 </script>
 

@@ -4,7 +4,7 @@
       <router-link to="/">
         <div class="d-flex align-center">
           <v-img
-            alt="Vuetify Logo"
+            alt="kyomaru logo"
             class="shrink mr-2"
             contain
             src="../../assets/kyomaru-logo.webp"
@@ -13,7 +13,7 @@
           />
 
           <v-img
-            alt="Kyomaru Name"
+            alt="kyomaru nombre"
             class="shrink hidden-sm-and-down"
             contain
             min-width="100"
@@ -24,9 +24,17 @@
       </router-link>
 
       <v-spacer></v-spacer>
-      <v-btn icon to="/busqueda" class="hidden-sm-and-down">
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      <v-text-field
+        v-model="query"
+        label="Buscar en KyoMaru"
+        append-icon="mdi-magnify"
+        class="mt-7 hidden-sm-and-down"
+        solo
+        dense
+        rounded
+        style="max-width: 277px"
+        @click:append="search"
+      ></v-text-field>
 
       <v-menu
         v-if="getUser"
@@ -128,11 +136,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import Dialog from "./Dialog";
+import { mapActions, mapGetters } from 'vuex';
+import Dialog from './Dialog';
 
 export default {
-  name: "Navbar",
+  name: 'Navbar',
   components: {
     Dialog,
   },
@@ -142,9 +150,10 @@ export default {
     menu: false,
     message: false,
     hints: true,
+    query: '',
   }),
   methods: {
-    ...mapActions(["show_Dialog", "sign_Out"]),
+    ...mapActions(['show_Dialog', 'sign_Out']),
     setTab(value) {
       this.tab = value;
     },
@@ -152,9 +161,13 @@ export default {
       this.setTab(tabIndex);
       this.show_Dialog(true);
     },
+    search() {
+      this.$router.replace({ name: 'Search', query: { q: this.query } });
+      this.query = '';
+    },
   },
   computed: {
-    ...mapGetters(["getUser", "getTotalCountInCart"]),
+    ...mapGetters(['getUser', 'getTotalCountInCart']),
     name() {
       return `${this.getUser.name} ${this.getUser.lastName}`;
     },
@@ -163,10 +176,10 @@ export default {
     },
     avatar() {
       return this.getUser.name
-        ? `${this.getUser.name.split("")[0]}${
-            this.getUser.lastName.split("")[0]
+        ? `${this.getUser.name.split('')[0]}${
+            this.getUser.lastName.split('')[0]
           }`
-        : "";
+        : '';
     },
   },
 };

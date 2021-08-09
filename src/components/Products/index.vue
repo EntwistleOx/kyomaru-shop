@@ -8,21 +8,15 @@
 </template>
 
 <script>
-import Product from "./Product";
-import { mapGetters } from "vuex";
+import Product from './Product';
 
 export default {
-  name: "Products",
+  name: 'Products',
+  props: ['products'],
   components: {
     Product,
   },
   data: () => ({}),
-  computed: {
-    ...mapGetters(["getProducts"]),
-    products() {
-      return this.getProducts;
-    },
-  },
 };
 </script>
 

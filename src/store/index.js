@@ -570,14 +570,44 @@ export default new Vuex.Store({
         .firestore()
         .collection('users')
         .where('admin', '==', false)
-        .onSnapshot((snapshot) => {
-          const users = [];
-          snapshot.forEach((doc) => {
-            users.push({ ...doc.data(), id: doc.id });
+        .get()
+        .then((users) => {
+          const usersArry = [];
+          users.forEach((user) => {
+            firebase
+              .firestore()
+              .collection('users')
+              .doc(user.id)
+              .collection('orders')
+              .get()
+              .then((orders) => {
+                const ordersArry = [];
+                orders.forEach((order) => {
+                  ordersArry.push({
+                    ...order.data(),
+                    id: order.id,
+                  });
+                });
+                usersArry.push({
+                  ...user.data(),
+                  id: user.id,
+                  orders: ordersArry,
+                });
+                commit('SET_USERS', usersArry);
+              })
+              .catch((error) => {
+                const snack = {
+                  show: true,
+                  text: error.message,
+                  color: 'error',
+                };
+                commit('SHOW_SNACK', snack);
+              });
           });
-          commit('SET_USERS', users);
         });
     },
+    // Search
+    // categories || description || name
   },
   getters: {
     snackbar: ({ snack }) => {

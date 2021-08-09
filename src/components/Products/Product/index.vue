@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-row>
-      <v-spacer></v-spacer>
       <v-col
         v-for="product in products"
         :key="product.id"

@@ -1,13 +1,13 @@
 <template>
   <div>
     <Hero />
-    <Products />
+    <Products :products="getProducts" />
     <Categories />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import Hero from '@/components/Hero';
 import Products from '@/components/Products';
@@ -27,11 +27,13 @@ export default {
 
   methods: {
     ...mapActions(['fetch_Categories', 'fetch_Products']),
-
     initialize() {
       this.fetch_Categories();
       this.fetch_Products();
     },
+  },
+  computed: {
+    ...mapGetters(['getProducts']),
   },
 };
 </script>
