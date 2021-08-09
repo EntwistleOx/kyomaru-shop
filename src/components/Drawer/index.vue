@@ -4,15 +4,18 @@
       <v-list nav dense>
         <v-list-item>
           <v-list-item-title>
-            <v-btn text small rounded class="text-none"> Registrate </v-btn>
+            <v-btn text small rounded class="text-none" @click="openDialog(0)">
+              Registrate
+            </v-btn>
           </v-list-item-title>
         </v-list-item>
         <v-list-item>
           <v-list-item-title>
-            <v-btn text small rounded class="text-none"> Iniciar Sesion </v-btn>
+            <v-btn text small rounded class="text-none" @click="openDialog(1)">
+              Iniciar Sesion
+            </v-btn>
           </v-list-item-title>
         </v-list-item>
-
         <v-divider></v-divider>
 
         <v-list-item-group
@@ -117,11 +120,30 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   data: () => ({
-    drawer: true,
     group: null,
   }),
+  methods: {
+    ...mapActions(['show_Drawer', 'show_Dialog']),
+
+    openDialog(tabIndex) {
+      this.show_Dialog({ state: true, tab: tabIndex });
+    },
+  },
+  computed: {
+    ...mapGetters(['getDrawer']),
+    drawer: {
+      get: function () {
+        return this.getDrawer;
+      },
+      set: function (newValue) {
+        this.show_Drawer(newValue);
+      },
+    },
+  },
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Navbar />
-    <!-- <Drawer /> -->
+    <Drawer />
     <Snackbar />
     <v-main>
       <v-btn
@@ -17,7 +17,6 @@
       >
         <v-icon x-large>mdi-whatsapp</v-icon>
       </v-btn>
-
       <router-view />
     </v-main>
 
@@ -31,7 +30,7 @@ import { mapActions } from 'vuex';
 // Components
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-// import Drawer from '@/components/Drawer';
+import Drawer from '@/components/Drawer';
 import Snackbar from '@/components/Snackbar';
 
 export default {
@@ -39,7 +38,7 @@ export default {
   components: {
     Navbar,
     Footer,
-    // Drawer,
+    Drawer,
     Snackbar,
   },
   data: () => ({

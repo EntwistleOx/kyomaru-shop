@@ -19,7 +19,7 @@ export default new Vuex.Store({
     shiping: shiping,
     snack: {},
     drawer: false,
-    dialog: false,
+    dialog: { state: false, tab: null },
     order: {},
   },
   mutations: {
@@ -612,6 +612,9 @@ export default new Vuex.Store({
   getters: {
     snackbar: ({ snack }) => {
       return snack;
+    },
+    getDrawer: ({ drawer }) => {
+      return drawer;
     },
     getUser: ({ user }) => {
       return user;

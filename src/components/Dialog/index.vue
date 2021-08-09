@@ -1,14 +1,14 @@
 <template>
-  <v-dialog v-model="getDialog" persistent max-width="600px">
+  <v-dialog v-model="getDialog.state" max-width="600px">
     <v-card>
-      <v-tabs v-model="tab" grow>
+      <v-tabs v-model="getDialog.tab" grow>
         <v-tab v-for="item in items" :key="item">
           <span class="text-none">
             {{ item }}
           </span>
         </v-tab>
       </v-tabs>
-      <v-tabs-items v-model="tab">
+      <v-tabs-items v-model="getDialog.tab">
         <v-tab-item>
           <v-card-text>
             <Register ref="dialog" />
@@ -31,43 +31,31 @@
         >
           Enviar
         </v-btn>
-
-        <v-btn
-          text
-          color="blue darken-1"
-          @click="show_Dialog(false)"
-          class="text-none"
-          outlined
-          rounded
-        >
-          Cerrar
-        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
-import SignIn from "./SignIn";
-import Register from "./Register";
+import SignIn from './SignIn';
+import Register from './Register';
 
 export default {
-  name: "Dialog",
+  name: 'Dialog',
   components: {
     SignIn,
     Register,
   },
-  props: ["tab"],
   data: () => ({
-    items: ["Registrate", "Iniciar Sesion"],
+    items: ['Registrate', 'Iniciar Sesion'],
   }),
   computed: {
-    ...mapGetters(["getDialog"]),
+    ...mapGetters(['getDialog']),
   },
   methods: {
-    ...mapActions(["show_Dialog"]),
+    ...mapActions(['show_Dialog']),
     submit() {
       this.$refs.dialog.submit();
     },

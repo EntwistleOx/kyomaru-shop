@@ -99,7 +99,7 @@
           <v-icon>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
-      <v-btn text rounded class="hidden-md-and-up">
+      <v-btn text rounded class="hidden-md-and-up" @click="showDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
 
@@ -130,14 +130,14 @@
         Iniciar Sesion
       </v-btn>
 
-      <Dialog :tab="tab" />
+      <Dialog />
     </v-app-bar>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Dialog from './Dialog';
+import Dialog from '@/components/Dialog';
 
 export default {
   name: 'Navbar',
@@ -145,7 +145,6 @@ export default {
     Dialog,
   },
   data: () => ({
-    tab: null,
     fav: true,
     menu: false,
     message: false,
@@ -153,21 +152,21 @@ export default {
     query: '',
   }),
   methods: {
-    ...mapActions(['show_Dialog', 'sign_Out']),
-    setTab(value) {
-      this.tab = value;
-    },
+    ...mapActions(['show_Dialog', 'sign_Out', 'show_Drawer']),
+
     openDialog(tabIndex) {
-      this.setTab(tabIndex);
-      this.show_Dialog(true);
+      this.show_Dialog({ state: true, tab: tabIndex });
     },
     search() {
       this.$router.replace({ name: 'Search', query: { q: this.query } });
       this.query = '';
     },
+    showDrawer() {
+      this.show_Drawer(!this.getDrawer);
+    },
   },
   computed: {
-    ...mapGetters(['getUser', 'getTotalCountInCart']),
+    ...mapGetters(['getUser', 'getTotalCountInCart', 'getDrawer']),
     name() {
       return `${this.getUser.name} ${this.getUser.lastName}`;
     },
