@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 import firebase from 'firebase';
 
 // JSON Data
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   state: {
     cart: [],
     products: [],
+    filteredProducts: [],
     categories: [],
     users: [],
     user: null,
@@ -62,6 +64,9 @@ export default new Vuex.Store({
     SET_PRODUCTS(state, products) {
       state.products = products;
     },
+    SET_FILTERED_PRODUCTS(state, filteredProducts) {
+      state.filteredProducts = filteredProducts;
+    },
     SET_CATEGORIES(state, categories) {
       state.categories = categories;
     },
@@ -104,7 +109,7 @@ export default new Vuex.Store({
                 color: 'success',
               };
               commit('SHOW_SNACK', snack);
-              commit('SHOW_DIALOG', false);
+              commit('SHOW_DIALOG', { state: false, tab: null });
             })
             .catch((error) => {
               const snack = {
@@ -135,7 +140,7 @@ export default new Vuex.Store({
             color: 'success',
           };
           commit('SHOW_SNACK', snack);
-          commit('SHOW_DIALOG', false);
+          commit('SHOW_DIALOG', { state: false, tab: null });
         })
         .catch((error) => {
           const snack = {
@@ -431,6 +436,7 @@ export default new Vuex.Store({
             products.push({ ...doc.data(), id: doc.id });
           });
           commit('SET_PRODUCTS', products);
+          commit('SET_FILTERED_PRODUCTS', products);
         });
     },
     add_Product({ commit }, product) {
@@ -564,6 +570,23 @@ export default new Vuex.Store({
       };
       commit('SHOW_SNACK', snack);
     },
+    // FILTERED PRODUCTS
+    filterForProducts({ commit, state: { products } }, searchKey) {
+      const result = products.filter((obj) => {
+        return Object.keys(obj).some((key) => {
+          if (key === 'description' || key === 'name' || key === 'categories') {
+            if (Array.isArray(obj[key])) {
+              return obj[key].some(
+                (element) => element.toLowerCase() === searchKey.toLowerCase(),
+              );
+            } else {
+              return obj[key].toLowerCase().includes(searchKey.toLowerCase());
+            }
+          }
+        });
+      });
+      commit('SET_FILTERED_PRODUCTS', result);
+    },
     // USERS
     fetch_Users({ commit }) {
       firebase
@@ -606,8 +629,6 @@ export default new Vuex.Store({
           });
         });
     },
-    // Search
-    // categories || description || name
   },
   getters: {
     snackbar: ({ snack }) => {
@@ -627,6 +648,9 @@ export default new Vuex.Store({
     },
     getProducts: ({ products }) => {
       return products;
+    },
+    getFilteredProducts: ({ filteredProducts }) => {
+      return filteredProducts;
     },
     getCart: ({ cart }) => {
       return cart;
@@ -663,4 +687,5 @@ export default new Vuex.Store({
     },
   },
   modules: {},
+  plugins: [createPersistedState()],
 });

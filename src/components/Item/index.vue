@@ -112,9 +112,7 @@ export default {
     },
   },
   created() {
-    // created
     const result = this.getItem(this.$route.params.id);
-    console.log(result);
     this.item.id = result.id;
     this.item.name = result.name;
     this.item.description = result.description;

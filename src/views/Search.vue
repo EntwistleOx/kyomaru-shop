@@ -1,12 +1,11 @@
 <template>
   <div>
-    <Search :products="products" />
+    <Search :products="getFilteredProducts" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
+import { mapActions, mapGetters } from 'vuex';
 import Search from '@/components/Search';
 
 export default {
@@ -14,33 +13,16 @@ export default {
   components: {
     Search,
   },
-  data: () => ({
-    products: [],
-  }),
+  data: () => ({}),
   computed: {
-    ...mapGetters(['getProducts']),
+    ...mapGetters(['getFilteredProducts']),
   },
   methods: {
-    filterIt(arr, searchKey) {
-      const result = arr.filter((obj) => {
-        return Object.keys(obj).some((key) => {
-          if (key === 'description' || key === 'name' || key === 'categories') {
-            if (Array.isArray(obj[key])) {
-              return obj[key].some(
-                (element) => element.toLowerCase() === searchKey.toLowerCase(),
-              );
-            } else {
-              return obj[key].toLowerCase().includes(searchKey.toLowerCase());
-            }
-          }
-        });
-      });
-      this.products = result;
-    },
+    ...mapActions(['filterForProducts']),
   },
   mounted() {
     const query = this.$route.query.q;
-    this.filterIt(this.getProducts, query);
+    this.filterForProducts(query);
   },
 };
 </script>

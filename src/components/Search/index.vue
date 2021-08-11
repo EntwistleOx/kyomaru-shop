@@ -1,6 +1,11 @@
 <template>
   <div>
-    <Products :products="products" />
+    <Products
+      :products="products"
+      :title="`La busqueda ha arrojado ${products.length} ${
+        products.length === 1 ? 'resultado' : 'resultados'
+      }`"
+    />
   </div>
 </template>
 

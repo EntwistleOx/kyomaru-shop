@@ -1,7 +1,7 @@
 <template>
   <div>
     <Hero />
-    <Products :products="getProducts" />
+    <Products :products="getFilteredProducts" title="Productos" />
     <Categories />
   </div>
 </template>
@@ -33,7 +33,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getProducts']),
+    ...mapGetters(['getFilteredProducts']),
   },
 };
 </script>

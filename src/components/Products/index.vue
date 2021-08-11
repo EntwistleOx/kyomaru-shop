@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-subheader class="pl-0">Productos</v-subheader>
+      <v-subheader class="pl-0">{{ title }}</v-subheader>
       <Product :products="products" />
     </v-container>
   </div>
@@ -12,7 +12,7 @@ import Product from './Product';
 
 export default {
   name: 'Products',
-  props: ['products'],
+  props: ['products', 'title'],
   components: {
     Product,
   },

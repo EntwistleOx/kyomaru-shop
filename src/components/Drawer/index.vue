@@ -22,94 +22,16 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item>
+          <v-list-item v-for="category in getCategories" :key="category.id">
             <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Abanicos
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Ceremonia del Te
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Colgantes & Llaveros
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Daruma
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Furin
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Zodiaco Oriental
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Incienso
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Lucky Cat
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Omamori
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Papeleria
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Poleras
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Tazas
-              </v-btn>
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>
-              <v-btn text small rounded class="text-none" to="busqueda">
-                Contacto
+              <v-btn
+                text
+                small
+                rounded
+                class="text-none"
+                :to="`/buscar?q=${category.name}`"
+              >
+                {{ category.name }}
               </v-btn>
             </v-list-item-title>
           </v-list-item>
@@ -134,7 +56,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getDrawer']),
+    ...mapGetters(['getDrawer', 'getCategories']),
     drawer: {
       get: function () {
         return this.getDrawer;

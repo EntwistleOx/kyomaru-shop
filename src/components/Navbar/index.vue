@@ -33,7 +33,7 @@
         dense
         rounded
         style="max-width: 277px"
-        @click:append="search"
+        @keyup="search"
       ></v-text-field>
 
       <v-menu
@@ -152,14 +152,17 @@ export default {
     query: '',
   }),
   methods: {
-    ...mapActions(['show_Dialog', 'sign_Out', 'show_Drawer']),
-
+    ...mapActions([
+      'show_Dialog',
+      'sign_Out',
+      'show_Drawer',
+      'filterForProducts',
+    ]),
     openDialog(tabIndex) {
       this.show_Dialog({ state: true, tab: tabIndex });
     },
     search() {
-      this.$router.replace({ name: 'Search', query: { q: this.query } });
-      this.query = '';
+      this.filterForProducts(this.query);
     },
     showDrawer() {
       this.show_Drawer(!this.getDrawer);
