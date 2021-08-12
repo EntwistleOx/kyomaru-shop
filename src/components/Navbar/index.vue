@@ -69,10 +69,10 @@
           <v-divider></v-divider>
 
           <v-list v-if="!getUser.admin">
-            <v-list-item>
+            <!-- <v-list-item>
               <v-list-item-title>Mi Cuenta</v-list-item-title>
-            </v-list-item>
-            <v-list-item>
+            </v-list-item> -->
+            <v-list-item to="/mi-cuenta/ordenes">
               <v-list-item-title>Ordenes</v-list-item-title>
             </v-list-item>
           </v-list>

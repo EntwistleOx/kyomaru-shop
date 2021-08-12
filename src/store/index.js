@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import firebase from 'firebase';
+import { translateFirebaseError } from '../utils';
 
 // JSON Data
 import { regions } from '../data/comunas-regiones.json';
@@ -130,7 +131,7 @@ export default new Vuex.Store({
         .catch((error) => {
           const snack = {
             show: true,
-            text: error.message,
+            text: translateFirebaseError(error.code),
             color: 'error',
           };
           commit('SHOW_SNACK', snack);
@@ -152,7 +153,7 @@ export default new Vuex.Store({
         .catch((error) => {
           const snack = {
             show: true,
-            text: error.message,
+            text: translateFirebaseError(error.code),
             color: 'error',
           };
           commit('SHOW_SNACK', snack);
@@ -191,8 +192,27 @@ export default new Vuex.Store({
                   const user = { ...doc.data(), id: doc.id, admin };
                   commit('SET_USER', user);
                 } else {
-                  const user = { ...doc.data(), id: doc.id };
-                  commit('SET_USER', user);
+                  firebase
+                    .firestore()
+                    .collection('users')
+                    .doc(doc.id)
+                    .collection('orders')
+                    .get()
+                    .then((orders) => {
+                      const ordersArry = [];
+                      orders.forEach((order) => {
+                        ordersArry.push({
+                          ...order.data(),
+                          id: order.id,
+                        });
+                      });
+                      const user = {
+                        ...doc.data(),
+                        id: doc.id,
+                        orders: ordersArry,
+                      };
+                      commit('SET_USER', user);
+                    });
                 }
               });
             })
@@ -665,7 +685,6 @@ export default new Vuex.Store({
               id: order.id,
             });
           });
-
           commit('SET_ORDERS', ordersArry);
         })
         .catch((error) => {
@@ -714,6 +733,9 @@ export default new Vuex.Store({
     },
     getOrders: ({ orders }) => {
       return orders;
+    },
+    getMyOrders: ({ user }) => {
+      return user.orders;
     },
     getCategories: ({ categories }) => {
       return categories;

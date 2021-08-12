@@ -13,7 +13,7 @@
 
             <v-card-subtitle class="text-subtitle-1"
               >Precio:
-              <strong> ${{ item.price }} </strong>
+              <strong> ${{ formatPrice(item.price) }} </strong>
             </v-card-subtitle>
 
             <v-card-actions>
@@ -64,7 +64,9 @@
       >
         <v-row align="center" v-if="getCart.length > 0">
           <v-col class="grow">
-            <div class="text-h6">Sub Total: ${{ getSubTotal }}</div>
+            <div class="text-h6">
+              Sub Total: ${{ formatPrice(getSubTotal) }}
+            </div>
             <div>
               En la pantalla de pagos se incluye el impuesto y se calculan los
               gastos de envío.
@@ -88,6 +90,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { formatCurrency } from '@/utils';
 
 export default {
   name: 'Cart',
@@ -109,6 +112,9 @@ export default {
     },
     deleteItem(id) {
       this.delete_Item_From_Cart(id);
+    },
+    formatPrice(number) {
+      return formatCurrency(number);
     },
   },
 };

@@ -24,7 +24,7 @@
           <h1 class="pl-6 text-h5">{{ item.name }}</h1>
           <p class="pl-6 text-h6">
             Precio:
-            <span> ${{ item.price }} </span>
+            <span> ${{ formatPrice(item.price) }} </span>
           </p>
 
           <div class="pl-4 mt-5 d-flex" v-if="getUser">
@@ -67,6 +67,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { formatCurrency } from '@/utils';
 
 export default {
   data: () => ({
@@ -109,6 +110,9 @@ export default {
     },
     addToCart() {
       this.add_To_Cart(this.item);
+    },
+    formatPrice(number) {
+      return formatCurrency(number);
     },
   },
   created() {

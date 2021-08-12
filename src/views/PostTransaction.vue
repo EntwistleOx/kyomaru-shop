@@ -52,9 +52,13 @@
 
             <v-row>
               <v-col cols="6"> Subtotal </v-col>
-              <v-col cols="6"> ${{ getOrder.totals.subtotal }} </v-col>
+              <v-col cols="6">
+                ${{ formatPrice(getOrder.totals.subtotal) }}
+              </v-col>
               <v-col cols="6"> Envio </v-col>
-              <v-col cols="6"> ${{ getOrder.totals.shipment }} </v-col>
+              <v-col cols="6">
+                ${{ formatPrice(getOrder.totals.shipment) }}
+              </v-col>
             </v-row>
 
             <v-divider class="my-5"></v-divider>
@@ -65,7 +69,7 @@
               </v-col>
               <v-col cols="6">
                 <strong class="text--primary">
-                  ${{ getOrder.totals.total }}
+                  ${{ formatPrice(getOrder.totals.total) }}
                 </strong>
               </v-col>
             </v-row>
@@ -80,11 +84,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
+import { formatCurrency } from '@/utils';
 
 export default {
-  name: "Product",
-  props: ["userId", "orderId"],
+  name: 'Product',
+  props: ['userId', 'orderId'],
   data() {
     return {};
   },
@@ -92,12 +97,15 @@ export default {
     this.setData();
   },
   computed: {
-    ...mapGetters(["getOrder"]),
+    ...mapGetters(['getOrder']),
   },
   methods: {
-    ...mapActions(["get_Order"]),
+    ...mapActions(['get_Order']),
     setData() {
       this.get_Order({ userId: this.userId, orderId: this.orderId });
+    },
+    formatPrice(number) {
+      return formatCurrency(number);
     },
   },
 };

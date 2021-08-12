@@ -15,7 +15,7 @@
               <v-card-title>{{ product.name }}</v-card-title>
               <v-card-text>
                 <div class="text-subtitle-1">
-                  <strong> ${{ product.price }} </strong>
+                  <strong> ${{ formatPrice(product.price) }} </strong>
                 </div>
               </v-card-text>
             </v-card>
@@ -27,10 +27,17 @@
 </template>
 
 <script>
+import { formatCurrency } from '@/utils';
+
 export default {
   name: 'Product',
   props: ['products'],
   data: () => ({}),
+  methods: {
+    formatPrice(number) {
+      return formatCurrency(number);
+    },
+  },
 };
 </script>
 

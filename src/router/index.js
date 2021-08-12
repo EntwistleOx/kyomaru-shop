@@ -9,6 +9,7 @@ import Search from '../views/Search.vue';
 import Cart from '../views/Cart.vue';
 import Checkout from '../views/Checkout.vue';
 import Contact from '../views/Contact.vue';
+import MyOrders from '../views/MyOrders';
 import PostTransaction from '../views/PostTransaction';
 import PostTransactionError from '../views/PostTransactionError';
 import AdminLogin from '../views/Admin/Login.vue';
@@ -46,22 +47,42 @@ const routes = [
     path: '/carrito',
     name: 'Cart',
     component: Cart,
+    meta: {
+      auth: true,
+    },
   },
   {
     path: '/checkout',
     name: 'Checkout',
     component: Checkout,
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: '/mi-cuenta/ordenes',
+    name: 'MyOrders',
+    component: MyOrders,
+    meta: {
+      auth: true,
+    },
   },
   {
     path: '/:userId/orden/:orderId',
     name: 'PostTransaction',
     component: PostTransaction,
     props: true,
+    meta: {
+      auth: true,
+    },
   },
   {
     path: '/orden/error',
     name: 'PostTransactionError',
     component: PostTransactionError,
+    meta: {
+      auth: true,
+    },
   },
   {
     path: '/admin',
@@ -125,6 +146,7 @@ router.beforeEach((to, from, next) => {
   }, 300);
   firebase.auth().onAuthStateChanged((user) => {
     let adminRequired = to.matched.some((route) => route.meta.admin);
+    let authRequired = to.matched.some((route) => route.meta.auth);
     if (user) {
       user.getIdTokenResult().then((idTokenResult) => {
         const admin = idTokenResult.claims.admin;
@@ -132,7 +154,7 @@ router.beforeEach((to, from, next) => {
         else next();
       });
     } else {
-      if (adminRequired) next('/');
+      if (adminRequired || authRequired) next('/');
       else next();
     }
   });

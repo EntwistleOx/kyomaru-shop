@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-parallax height="500" src="hero3.webp">
+    <v-parallax height="350" src="hero3.webp">
       <v-row align="center" justify="center">
         <v-col class="text-center" cols="12">
           <h1 class="text-h2 text-sm-h1 font-weight-thin mb-4">KyoMaru</h1>
