@@ -68,9 +68,13 @@
 
                     <v-row>
                       <v-col cols="6"> Subtotal </v-col>
-                      <v-col cols="6"> ${{ item.totals.subtotal }} </v-col>
+                      <v-col cols="6">
+                        ${{ formatPrice(item.totals.subtotal) }}
+                      </v-col>
                       <v-col cols="6"> Envio </v-col>
-                      <v-col cols="6"> ${{ item.totals.shipment }} </v-col>
+                      <v-col cols="6">
+                        ${{ formatPrice(item.totals.shipment) }}
+                      </v-col>
                     </v-row>
 
                     <v-divider class="my-5"></v-divider>
@@ -81,7 +85,7 @@
                       </v-col>
                       <v-col cols="6">
                         <strong class="text--primary">
-                          ${{ item.totals.total }}
+                          ${{ formatPrice(item.totals.total) }}
                         </strong>
                       </v-col>
                     </v-row>
@@ -95,6 +99,9 @@
       <template v-slot:[`item.createdAt`]="{ item }">
         {{ getDateFormat(item.createdAt) }}
       </template>
+      <template v-slot:[`item.totals.total`]="{ item }">
+        ${{ formatPrice(item.totals.total) }}
+      </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize"> Recargar </v-btn>
       </template>
@@ -104,6 +111,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { formatCurrency } from '@/utils';
 
 import Menu from '@/components/Admin/Menu';
 
@@ -165,6 +173,10 @@ export default {
       } else {
         return 'Pago No Autorizado';
       }
+    },
+
+    formatPrice(number) {
+      return formatCurrency(number);
     },
   },
 };

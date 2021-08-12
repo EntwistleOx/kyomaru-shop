@@ -55,9 +55,13 @@
 
                     <v-row>
                       <v-col cols="6"> Subtotal </v-col>
-                      <v-col cols="6"> ${{ order.totals.subtotal }} </v-col>
+                      <v-col cols="6">
+                        ${{ formatPrice(order.totals.subtotal) }}
+                      </v-col>
                       <v-col cols="6"> Envio </v-col>
-                      <v-col cols="6"> ${{ order.totals.shipment }} </v-col>
+                      <v-col cols="6">
+                        ${{ formatPrice(order.totals.shipment) }}
+                      </v-col>
                     </v-row>
 
                     <v-divider class="my-5"></v-divider>
@@ -68,7 +72,7 @@
                       </v-col>
                       <v-col cols="6">
                         <strong class="text--primary">
-                          ${{ order.totals.total }}
+                          ${{ formatPrice(order.totals.total) }}
                         </strong>
                       </v-col>
                     </v-row>
@@ -88,6 +92,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { formatCurrency } from '@/utils';
 
 import Menu from '@/components/Admin/Menu';
 
@@ -143,6 +148,10 @@ export default {
       } else {
         return 'Pago No Autorizado';
       }
+    },
+
+    formatPrice(number) {
+      return formatCurrency(number);
     },
   },
 };

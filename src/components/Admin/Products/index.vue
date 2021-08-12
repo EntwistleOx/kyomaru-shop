@@ -196,6 +196,9 @@
       <template v-slot:[`item.dimensions`]="{ item }">
         {{ `${item.dimensions.height}cmX${item.dimensions.width}cm` }}
       </template>
+      <template v-slot:[`item.price`]="{ item }">
+        ${{ formatPrice(item.price) }}
+      </template>
       <template v-slot:[`item.photo`]="{ item }">
         <v-img
           :src="item.photo.url"
@@ -219,6 +222,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import { validationMixin } from 'vuelidate';
 import { required, requiredIf } from 'vuelidate/lib/validators';
+import { formatCurrency } from '@/utils';
 
 import Menu from '@/components/Admin/Menu';
 
@@ -490,6 +494,10 @@ export default {
           this.close();
         }
       }
+    },
+
+    formatPrice(number) {
+      return formatCurrency(number);
     },
   },
 };
