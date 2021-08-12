@@ -1,12 +1,12 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import createPersistedState from 'vuex-persistedstate';
-import firebase from 'firebase';
-import { translateFirebaseError } from '../utils';
+import Vue from "vue";
+import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
+import firebase from "firebase";
+import { translateFirebaseError } from "../utils";
 
 // JSON Data
-import { regions } from '../data/comunas-regiones.json';
-import { shiping } from '../data/shiping.json';
+import { regions } from "../data/comunas-regiones.json";
+import { shiping } from "../data/shiping.json";
 
 Vue.use(Vuex);
 
@@ -45,7 +45,7 @@ export default new Vuex.Store({
       } else {
         state.cart.push(product);
       }
-      console.log('Producto agregado al carrito!');
+      console.log("Producto agregado al carrito!");
     },
     UPDATE_CART_QUANTITY(state, updatedCart) {
       state.cart = updatedCart;
@@ -82,13 +82,13 @@ export default new Vuex.Store({
   actions: {
     // SHOW COMPONENTS
     show_Drawer({ commit }, drawer) {
-      commit('SHOW_DRAWER', drawer);
+      commit("SHOW_DRAWER", drawer);
     },
     show_Snack({ commit }, snack) {
-      commit('SHOW_SNACK', snack);
+      commit("SHOW_SNACK", snack);
     },
     show_Dialog({ commit }, dialog) {
-      commit('SHOW_DIALOG', dialog);
+      commit("SHOW_DIALOG", dialog);
     },
     // AUTH
     register({ commit }, { name, lastName, rut, phone, email, password }) {
@@ -107,34 +107,34 @@ export default new Vuex.Store({
           };
           firebase
             .firestore()
-            .collection('users')
+            .collection("users")
             .doc(uid)
             .set(fields)
             .then(() => {
               const snack = {
                 show: true,
-                text: 'Registrado con exito!',
-                color: 'success',
+                text: "Registrado con exito!",
+                color: "success",
               };
-              commit('SHOW_SNACK', snack);
-              commit('SHOW_DIALOG', { state: false, tab: null });
+              commit("SHOW_SNACK", snack);
+              commit("SHOW_DIALOG", { state: false, tab: null });
             })
             .catch((error) => {
               const snack = {
                 show: true,
                 text: error.message,
-                color: 'error',
+                color: "error",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             });
         })
         .catch((error) => {
           const snack = {
             show: true,
             text: translateFirebaseError(error.code),
-            color: 'error',
+            color: "error",
           };
-          commit('SHOW_SNACK', snack);
+          commit("SHOW_SNACK", snack);
         });
     },
     sign_In({ commit }, { email, password }) {
@@ -145,18 +145,18 @@ export default new Vuex.Store({
           const snack = {
             show: true,
             text: `Bienvenido!`,
-            color: 'success',
+            color: "success",
           };
-          commit('SHOW_SNACK', snack);
-          commit('SHOW_DIALOG', { state: false, tab: null });
+          commit("SHOW_SNACK", snack);
+          commit("SHOW_DIALOG", { state: false, tab: null });
         })
         .catch((error) => {
           const snack = {
             show: true,
             text: translateFirebaseError(error.code),
-            color: 'error',
+            color: "error",
           };
-          commit('SHOW_SNACK', snack);
+          commit("SHOW_SNACK", snack);
         });
     },
     sign_Out({ commit }) {
@@ -164,16 +164,16 @@ export default new Vuex.Store({
         .auth()
         .signOut()
         .then(() => {
-          commit('CLEAR_CART');
-          commit('SET_USER', null);
+          commit("CLEAR_CART");
+          commit("SET_USER", null);
         })
         .catch((error) => {
           const snack = {
             show: true,
             text: error.message,
-            color: 'error',
+            color: "error",
           };
-          commit('SHOW_SNACK', snack);
+          commit("SHOW_SNACK", snack);
         });
     },
     auth_State_Change({ commit }) {
@@ -182,7 +182,7 @@ export default new Vuex.Store({
           const { uid } = userCredential;
           firebase
             .firestore()
-            .collection('users')
+            .collection("users")
             .doc(uid)
             .get()
             .then((doc) => {
@@ -190,13 +190,13 @@ export default new Vuex.Store({
                 const admin = idTokenResult.claims.admin;
                 if (admin) {
                   const user = { ...doc.data(), id: doc.id, admin };
-                  commit('SET_USER', user);
+                  commit("SET_USER", user);
                 } else {
                   firebase
                     .firestore()
-                    .collection('users')
+                    .collection("users")
                     .doc(doc.id)
-                    .collection('orders')
+                    .collection("orders")
                     .get()
                     .then((orders) => {
                       const ordersArry = [];
@@ -211,25 +211,25 @@ export default new Vuex.Store({
                         id: doc.id,
                         orders: ordersArry,
                       };
-                      commit('SET_USER', user);
+                      commit("SET_USER", user);
                     });
                 }
               });
             })
-            .catch(() => commit('SET_USER', null));
+            .catch(() => commit("SET_USER", null));
         } else {
-          commit('SET_USER', null);
+          commit("SET_USER", null);
         }
       });
     },
     // CART
     clear_Cart({ commit }) {
-      commit('CLEAR_CART');
+      commit("CLEAR_CART");
     },
     add_To_Cart({ commit, state }, { id, quantity }) {
       const product = state.products.find((product) => product.id === id);
       product.quantity = quantity;
-      commit('ADD_TO_CART', product);
+      commit("ADD_TO_CART", product);
     },
     add_Item_Quantity({ commit, state }, id) {
       const index = state.cart.findIndex((item) => item.id === id);
@@ -237,16 +237,16 @@ export default new Vuex.Store({
       cart[index].quantity >= 10
         ? cart[index].quantity
         : cart[index].quantity++;
-      commit('UPDATE_CART_QUANTITY', cart);
+      commit("UPDATE_CART_QUANTITY", cart);
     },
     substract_Item_Quantity({ commit, state }, id) {
       const index = state.cart.findIndex((item) => item.id === id);
       const cart = [...state.cart];
       cart[index].quantity <= 1 ? cart[index].quantity : cart[index].quantity--;
-      commit('UPDATE_CART_QUANTITY', cart);
+      commit("UPDATE_CART_QUANTITY", cart);
     },
     delete_Item_From_Cart({ commit }, id) {
-      commit('DELETE_FROM_CART', id);
+      commit("DELETE_FROM_CART", id);
     },
     // SAVE CART TO DB
     save_Cart({ commit, state: { user, cart } }, { address, totals }) {
@@ -255,14 +255,14 @@ export default new Vuex.Store({
       const userId = user.id;
       firebase
         .firestore()
-        .collection('users')
+        .collection("users")
         .doc(userId)
-        .collection('orders')
+        .collection("orders")
         .add({ address, cart, totals, createdAt })
         .then((doc) => {
           firebase
             .firestore()
-            .collection('orders')
+            .collection("orders")
             .doc(doc.id)
             .set({ address, cart, totals, user, createdAt })
             .then(() => {
@@ -272,35 +272,35 @@ export default new Vuex.Store({
               const snack = {
                 show: true,
                 text: error.message,
-                color: 'error',
+                color: "error",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             });
         })
         .catch((error) => {
           const snack = {
             show: true,
             text: error.message,
-            color: 'error',
+            color: "error",
           };
-          commit('SHOW_SNACK', snack);
+          commit("SHOW_SNACK", snack);
         });
     },
     // GET A ORDER
     get_Order({ commit }, { userId, orderId }) {
-      commit('CLEAR_CART');
+      commit("CLEAR_CART");
       firebase
         .firestore()
-        .collection('users')
+        .collection("users")
         .doc(userId)
         .get()
         .then((doc) => {
           const user = doc.data();
           firebase
             .firestore()
-            .collection('users')
+            .collection("users")
             .doc(userId)
-            .collection('orders')
+            .collection("orders")
             .doc(orderId)
             .get()
             .then((doc) => {
@@ -312,16 +312,16 @@ export default new Vuex.Store({
                 cart,
                 paymentStatus: payment.status,
               };
-              commit('SET_ORDER', order);
+              commit("SET_ORDER", order);
             })
             .catch((error) => {
               console.log(error);
               const snack = {
                 show: true,
                 text: error.message,
-                color: 'error',
+                color: "error",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             });
         })
         .catch((error) => {
@@ -329,23 +329,23 @@ export default new Vuex.Store({
           const snack = {
             show: true,
             text: error.message,
-            color: 'error',
+            color: "error",
           };
-          commit('SHOW_SNACK', snack);
+          commit("SHOW_SNACK", snack);
         });
     },
     // CATEGORIES
     fetch_Categories({ commit }) {
       firebase
         .firestore()
-        .collection('categories')
-        .orderBy('name', 'asc')
+        .collection("categories")
+        .orderBy("name", "asc")
         .onSnapshot((snapshot) => {
           const categories = [];
           snapshot.forEach((doc) => {
             categories.push({ ...doc.data(), id: doc.id });
           });
-          commit('SET_CATEGORIES', categories);
+          commit("SET_CATEGORIES", categories);
         });
     },
     add_Category({ commit }, category) {
@@ -363,15 +363,15 @@ export default new Vuex.Store({
           };
           firebase
             .firestore()
-            .collection('categories')
+            .collection("categories")
             .add(data)
             .then(() => {
               const snack = {
                 show: true,
-                text: 'Categoria agregada con exito.',
-                color: 'success',
+                text: "Categoria agregada con exito.",
+                color: "success",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             });
         });
       });
@@ -383,16 +383,16 @@ export default new Vuex.Store({
         };
         firebase
           .firestore()
-          .collection('categories')
+          .collection("categories")
           .doc(id)
           .update(data)
           .then(() => {
             const snack = {
               show: true,
-              text: 'Categoria editada con exito.',
-              color: 'success',
+              text: "Categoria editada con exito.",
+              color: "success",
             };
-            commit('SHOW_SNACK', snack);
+            commit("SHOW_SNACK", snack);
           });
       } else {
         const {
@@ -409,7 +409,7 @@ export default new Vuex.Store({
             };
             firebase
               .firestore()
-              .collection('categories')
+              .collection("categories")
               .doc(id)
               .update(data)
               .then(() => {
@@ -419,18 +419,18 @@ export default new Vuex.Store({
                   .then(function () {
                     const snack = {
                       show: true,
-                      text: 'Categoria editada con exito.',
-                      color: 'success',
+                      text: "Categoria editada con exito.",
+                      color: "success",
                     };
-                    commit('SHOW_SNACK', snack);
+                    commit("SHOW_SNACK", snack);
                   })
                   .catch(function (error) {
                     const snack = {
                       show: true,
                       text: error.message,
-                      color: 'error',
+                      color: "error",
                     };
-                    commit('SHOW_SNACK', snack);
+                    commit("SHOW_SNACK", snack);
                   });
               });
           });
@@ -440,7 +440,7 @@ export default new Vuex.Store({
     delete_Category({ commit }, { id, storage }) {
       firebase
         .firestore()
-        .collection('categories')
+        .collection("categories")
         .doc(id)
         .delete()
         .then(() => {
@@ -451,40 +451,40 @@ export default new Vuex.Store({
             .then(function () {
               const snack = {
                 show: true,
-                text: 'Categoria eliminada con exito.',
-                color: 'success',
+                text: "Categoria eliminada con exito.",
+                color: "success",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             })
             .catch(function (error) {
               const snack = {
                 show: true,
                 text: error.message,
-                color: 'error',
+                color: "error",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             });
         });
       const snack = {
         show: true,
-        text: 'Curso eliminado con exito.',
-        color: 'success',
+        text: "Curso eliminado con exito.",
+        color: "success",
       };
-      commit('SHOW_SNACK', snack);
+      commit("SHOW_SNACK", snack);
     },
     // PRODUCTS
     fetch_Products({ commit }) {
       firebase
         .firestore()
-        .collection('products')
-        .orderBy('name', 'asc')
+        .collection("products")
+        .orderBy("name", "asc")
         .onSnapshot((snapshot) => {
           const products = [];
           snapshot.forEach((doc) => {
             products.push({ ...doc.data(), id: doc.id });
           });
-          commit('SET_PRODUCTS', products);
-          commit('SET_FILTERED_PRODUCTS', products);
+          commit("SET_PRODUCTS", products);
+          commit("SET_FILTERED_PRODUCTS", products);
         });
     },
     add_Product({ commit }, product) {
@@ -502,15 +502,15 @@ export default new Vuex.Store({
           };
           firebase
             .firestore()
-            .collection('products')
+            .collection("products")
             .add(data)
             .then(() => {
               const snack = {
                 show: true,
-                text: 'Producto agregado con exito.',
-                color: 'success',
+                text: "Producto agregado con exito.",
+                color: "success",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             });
         });
       });
@@ -522,16 +522,16 @@ export default new Vuex.Store({
         delete data.photoStorage;
         firebase
           .firestore()
-          .collection('products')
+          .collection("products")
           .doc(id)
           .update(data)
           .then(() => {
             const snack = {
               show: true,
-              text: 'Producto editado con exito.',
-              color: 'success',
+              text: "Producto editado con exito.",
+              color: "success",
             };
-            commit('SHOW_SNACK', snack);
+            commit("SHOW_SNACK", snack);
           });
       } else {
         const {
@@ -549,7 +549,7 @@ export default new Vuex.Store({
             delete data.photoStorage;
             firebase
               .firestore()
-              .collection('products')
+              .collection("products")
               .doc(id)
               .update(data)
               .then(() => {
@@ -559,18 +559,18 @@ export default new Vuex.Store({
                   .then(function () {
                     const snack = {
                       show: true,
-                      text: 'Producto editado con exito.',
-                      color: 'success',
+                      text: "Producto editado con exito.",
+                      color: "success",
                     };
-                    commit('SHOW_SNACK', snack);
+                    commit("SHOW_SNACK", snack);
                   })
                   .catch(function (error) {
                     const snack = {
                       show: true,
                       text: error.message,
-                      color: 'error',
+                      color: "error",
                     };
-                    commit('SHOW_SNACK', snack);
+                    commit("SHOW_SNACK", snack);
                   });
               });
           });
@@ -580,7 +580,7 @@ export default new Vuex.Store({
     delete_Product({ commit }, { id, storage }) {
       firebase
         .firestore()
-        .collection('products')
+        .collection("products")
         .doc(id)
         .delete()
         .then(() => {
@@ -591,35 +591,35 @@ export default new Vuex.Store({
             .then(function () {
               const snack = {
                 show: true,
-                text: 'Producto eliminado con exito.',
-                color: 'success',
+                text: "Producto eliminado con exito.",
+                color: "success",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             })
             .catch(function (error) {
               const snack = {
                 show: true,
                 text: error.message,
-                color: 'error',
+                color: "error",
               };
-              commit('SHOW_SNACK', snack);
+              commit("SHOW_SNACK", snack);
             });
         });
       const snack = {
         show: true,
-        text: 'Curso eliminado con exito.',
-        color: 'success',
+        text: "Curso eliminado con exito.",
+        color: "success",
       };
-      commit('SHOW_SNACK', snack);
+      commit("SHOW_SNACK", snack);
     },
     // FILTERED PRODUCTS
     filterForProducts({ commit, state: { products } }, searchKey) {
       const result = products.filter((obj) => {
         return Object.keys(obj).some((key) => {
-          if (key === 'description' || key === 'name' || key === 'categories') {
+          if (key === "description" || key === "name" || key === "categories") {
             if (Array.isArray(obj[key])) {
               return obj[key].some(
-                (element) => element.toLowerCase() === searchKey.toLowerCase(),
+                (element) => element.toLowerCase() === searchKey.toLowerCase()
               );
             } else {
               return obj[key].toLowerCase().includes(searchKey.toLowerCase());
@@ -627,23 +627,23 @@ export default new Vuex.Store({
           }
         });
       });
-      commit('SET_FILTERED_PRODUCTS', result);
+      commit("SET_FILTERED_PRODUCTS", result);
     },
     // USERS
     fetch_Users({ commit }) {
       firebase
         .firestore()
-        .collection('users')
-        .where('admin', '==', false)
+        .collection("users")
+        .where("admin", "==", false)
         .get()
         .then((users) => {
           const usersArry = [];
           users.forEach((user) => {
             firebase
               .firestore()
-              .collection('users')
+              .collection("users")
               .doc(user.id)
-              .collection('orders')
+              .collection("orders")
               .get()
               .then((orders) => {
                 const ordersArry = [];
@@ -658,15 +658,15 @@ export default new Vuex.Store({
                   id: user.id,
                   orders: ordersArry,
                 });
-                commit('SET_USERS', usersArry);
+                commit("SET_USERS", usersArry);
               })
               .catch((error) => {
                 const snack = {
                   show: true,
                   text: error.message,
-                  color: 'error',
+                  color: "error",
                 };
-                commit('SHOW_SNACK', snack);
+                commit("SHOW_SNACK", snack);
               });
           });
         });
@@ -675,7 +675,7 @@ export default new Vuex.Store({
     fetch_Orders({ commit }) {
       firebase
         .firestore()
-        .collection('orders')
+        .collection("orders")
         .get()
         .then((orders) => {
           const ordersArry = [];
@@ -685,15 +685,15 @@ export default new Vuex.Store({
               id: order.id,
             });
           });
-          commit('SET_ORDERS', ordersArry);
+          commit("SET_ORDERS", ordersArry);
         })
         .catch((error) => {
           const snack = {
             show: true,
             text: error.message,
-            color: 'error',
+            color: "error",
           };
-          commit('SHOW_SNACK', snack);
+          commit("SHOW_SNACK", snack);
         });
     },
   },
@@ -754,7 +754,7 @@ export default new Vuex.Store({
       const subtotal = cart.reduce(
         (accumulator, currentValue) =>
           accumulator + currentValue.price * currentValue.quantity,
-        0,
+        0
       );
       return subtotal;
     },

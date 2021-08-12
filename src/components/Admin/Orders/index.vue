@@ -110,10 +110,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { formatCurrency } from '@/utils';
+import { mapActions, mapGetters } from "vuex";
+import { formatCurrency } from "@/utils";
 
-import Menu from '@/components/Admin/Menu';
+import Menu from "@/components/Admin/Menu";
 
 export default {
   components: {
@@ -122,32 +122,32 @@ export default {
   data: () => ({
     headers: [
       {
-        text: 'ID',
-        align: 'start',
+        text: "ID",
+        align: "start",
         sortable: false,
-        value: 'id',
+        value: "id",
       },
       {
-        text: 'Fecha',
-        value: 'createdAt',
+        text: "Fecha",
+        value: "createdAt",
       },
       {
-        text: 'Nombre',
-        value: 'user.name',
+        text: "Nombre",
+        value: "user.name",
       },
       {
-        text: 'Apellido',
-        value: 'user.lastName',
+        text: "Apellido",
+        value: "user.lastName",
       },
       {
-        text: 'Total',
-        value: 'totals.total',
+        text: "Total",
+        value: "totals.total",
       },
     ],
   }),
 
   computed: {
-    ...mapGetters(['getOrders']),
+    ...mapGetters(["getOrders"]),
   },
 
   mounted() {
@@ -155,7 +155,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetch_Orders']),
+    ...mapActions(["fetch_Orders"]),
 
     initialize() {
       this.fetch_Orders();
@@ -169,9 +169,9 @@ export default {
 
     paymentStatus(order) {
       if (order.payment) {
-        return 'Pago Autorizado';
+        return "Pago Autorizado";
       } else {
-        return 'Pago No Autorizado';
+        return "Pago No Autorizado";
       }
     },
 

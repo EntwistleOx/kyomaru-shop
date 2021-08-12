@@ -27,7 +27,7 @@
             <span> ${{ formatPrice(item.price) }} </span>
           </p>
 
-          <div class="pl-4 mt-5 d-flex" v-if="getUser">
+          <div class="pl-4 mt-5 d-flex" v-if="getUser && item.stock">
             <v-btn
               class="mx-2"
               fab
@@ -56,9 +56,18 @@
             color="error"
             @click="addToCart"
             v-if="getUser"
+            v-show="item.stock"
           >
             Agregar al Carrito
           </v-btn>
+          <v-chip
+            class="ml-6 mt-5"
+            color="red"
+            text-color="white"
+            v-if="item.stock === 0"
+          >
+            Agotado
+          </v-chip>
         </v-col>
       </v-row>
     </v-container>
@@ -66,42 +75,27 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import { formatCurrency } from '@/utils';
+import { mapGetters, mapActions } from "vuex";
+import { formatCurrency } from "@/utils";
 
 export default {
   data: () => ({
     item: {
-      id: '',
-      name: '',
-      description: '',
-      photo: '',
-      price: '',
+      id: "",
+      name: "",
+      description: "",
+      photo: "",
+      price: "",
+      stock: 0,
       quantity: 1,
     },
-    items: [
-      {
-        text: 'Inicio',
-        disabled: false,
-        href: '/',
-      },
-      {
-        text: 'Ceremonia del Te',
-        disabled: false,
-        href: 'busqueda',
-      },
-      {
-        text: 'Set Ceremonia del Te',
-        disabled: true,
-        href: '',
-      },
-    ],
+    items: [],
   }),
   computed: {
-    ...mapGetters(['getUser', 'getItem']),
+    ...mapGetters(["getUser", "getItem"]),
   },
   methods: {
-    ...mapActions(['add_To_Cart']),
+    ...mapActions(["add_To_Cart"]),
     add() {
       this.item.quantity >= 10 ? this.item.quantity : this.item.quantity++;
     },
@@ -122,6 +116,24 @@ export default {
     this.item.description = result.description;
     this.item.photo = result.photo.url;
     this.item.price = result.price;
+    this.item.stock = result.stock;
+    this.items = [
+      {
+        text: "Inicio",
+        disabled: false,
+        href: "/",
+      },
+      {
+        text: result.categories[0],
+        disabled: false,
+        href: `/buscar?q=${result.categories[0]}`,
+      },
+      {
+        text: result.name,
+        disabled: true,
+        href: "",
+      },
+    ];
   },
 };
 </script>
