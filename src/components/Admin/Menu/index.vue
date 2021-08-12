@@ -13,6 +13,9 @@
       <v-btn text small rounded class="text-none" to="/admin/users">
         Usuarios
       </v-btn>
+      <v-btn text small rounded class="text-none" to="/admin/orders">
+        Ordenes
+      </v-btn>
     </v-toolbar>
   </div>
 </template>

@@ -23,6 +23,7 @@ export default new Vuex.Store({
     drawer: false,
     dialog: { state: false, tab: null },
     order: {},
+    orders: [],
   },
   mutations: {
     SET_USER(state, user) {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     SET_USERS(state, users) {
       state.users = users;
+    },
+    CLEAR_CART(state) {
+      state.cart = [];
     },
     ADD_TO_CART(state, product) {
       const foundIndex = state.cart.findIndex((item) => item.id === product.id);
@@ -60,6 +64,9 @@ export default new Vuex.Store({
     },
     SET_ORDER(state, order) {
       state.order = order;
+    },
+    SET_ORDERS(state, orders) {
+      state.orders = orders;
     },
     SET_PRODUCTS(state, products) {
       state.products = products;
@@ -156,6 +163,7 @@ export default new Vuex.Store({
         .auth()
         .signOut()
         .then(() => {
+          commit('CLEAR_CART');
           commit('SET_USER', null);
         })
         .catch((error) => {
@@ -195,6 +203,9 @@ export default new Vuex.Store({
       });
     },
     // CART
+    clear_Cart({ commit }) {
+      commit('CLEAR_CART');
+    },
     add_To_Cart({ commit, state }, { id, quantity }) {
       const product = state.products.find((product) => product.id === id);
       product.quantity = quantity;
@@ -219,16 +230,32 @@ export default new Vuex.Store({
     },
     // SAVE CART TO DB
     save_Cart({ commit, state: { user, cart } }, { address, totals }) {
+      const createdAt = firebase.firestore.FieldValue.serverTimestamp();
+
       const userId = user.id;
       firebase
         .firestore()
         .collection('users')
         .doc(userId)
         .collection('orders')
-        .add({ address, cart, totals })
+        .add({ address, cart, totals, createdAt })
         .then((doc) => {
-          // return { userId, orderId: doc.id };
-          window.location = `http://localhost:5000/api/v1/tbk/?userId=${userId}&orderId=${doc.id}&amount=${totals.total}`;
+          firebase
+            .firestore()
+            .collection('orders')
+            .doc(doc.id)
+            .set({ address, cart, totals, user, createdAt })
+            .then(() => {
+              window.location = `http://localhost:5000/api/v1/tbk/?userId=${userId}&orderId=${doc.id}&amount=${totals.total}`;
+            })
+            .catch((error) => {
+              const snack = {
+                show: true,
+                text: error.message,
+                color: 'error',
+              };
+              commit('SHOW_SNACK', snack);
+            });
         })
         .catch((error) => {
           const snack = {
@@ -241,6 +268,7 @@ export default new Vuex.Store({
     },
     // GET A ORDER
     get_Order({ commit }, { userId, orderId }) {
+      commit('CLEAR_CART');
       firebase
         .firestore()
         .collection('users')
@@ -494,16 +522,10 @@ export default new Vuex.Store({
         const fileRef = storageRef.child(`products/${name}`);
         fileRef.put(photo).then(() => {
           fileRef.getDownloadURL().then((url) => {
-            // const data = {
-            //   name: product.name,
-            //   photo: { url, storage: `products/${name}` },
-            // };
-
             const data = {
               ...product,
               photo: { url, storage: `products/${name}` },
             };
-            // data.photo = { url, storage: `products/${name}` };
             delete data.photoStorage;
             firebase
               .firestore()
@@ -629,6 +651,32 @@ export default new Vuex.Store({
           });
         });
     },
+    // ORDERS
+    fetch_Orders({ commit }) {
+      firebase
+        .firestore()
+        .collection('orders')
+        .get()
+        .then((orders) => {
+          const ordersArry = [];
+          orders.forEach((order) => {
+            ordersArry.push({
+              ...order.data(),
+              id: order.id,
+            });
+          });
+
+          commit('SET_ORDERS', ordersArry);
+        })
+        .catch((error) => {
+          const snack = {
+            show: true,
+            text: error.message,
+            color: 'error',
+          };
+          commit('SHOW_SNACK', snack);
+        });
+    },
   },
   getters: {
     snackbar: ({ snack }) => {
@@ -663,6 +711,9 @@ export default new Vuex.Store({
     },
     getOrder: ({ order }) => {
       return order;
+    },
+    getOrders: ({ orders }) => {
+      return orders;
     },
     getCategories: ({ categories }) => {
       return categories;

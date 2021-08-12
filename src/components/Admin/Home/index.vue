@@ -44,6 +44,20 @@
           </v-hover>
         </router-link>
       </v-col>
+      <v-col cols="12">
+        <router-link to="/admin/orders">
+          <v-hover v-slot="{ hover }">
+            <v-card :elevation="hover ? 16 : 2" :class="{ 'on-hover': hover }">
+              <div class="d-flex justify-space-between">
+                <v-card-title>Ordenes</v-card-title>
+                <v-btn color="error" fab small class="mt-3 mr-3">
+                  <v-icon>mdi-file-document-multiple</v-icon>
+                </v-btn>
+              </div>
+            </v-card>
+          </v-hover>
+        </router-link>
+      </v-col>
     </v-row>
   </v-container>
 </template>

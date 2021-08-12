@@ -3,306 +3,130 @@
     <Menu />
     <v-data-table
       :headers="headers"
-      :items="desserts"
-      sort-by="calories"
+      :items="getOrders"
+      :items-per-page="5"
       class="elevation-1"
+      loading-text="Cargando..."
+      show-expand
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>Ordenes</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.name"
-                        label="Nombre"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.price"
-                        label="Precio"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.category"
-                        label="Categoria"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-textarea
-                        v-model="editedItem.description"
-                        label="Descripcion"
-                      ></v-textarea>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-file-input
-                        accept="image/*"
-                        v-model="editedItem.photo"
-                        label="Foto"
-                      ></v-file-input>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Cancelar
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="save">
-                  Guardar
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title class="text-h6"
-                >¿Seguro que quieres eliminar esta categoria?</v-card-title
-              >
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancelar</v-btn
-                >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                  >OK</v-btn
-                >
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-      </template>
+      <!-- <template v-slot:expanded-item="{ headers, item: { orders } }">
+        <td :colspan="headers.length">
+          <v-container>
+            <v-card v-for="order in orders" :key="order.id" class="mb-3">
+              <v-card-text>
+                <div class="text-subtitle-1 mb-4">
+                  #{{ `${order.id} - ${paymentStatus(order)}` }}
+                </div>
+                <div class="d-flex justify-space-between">
+                  <div>
+                    <div class="mt-3">
+                      <div class="mb-1 text--primary font-weight-regular">
+                        Informacion de despacho
+                      </div>
+                      <div>{{ order.address.address }}</div>
+                      <div>{{ order.address.zip }}</div>
+                      <div>
+                        {{ `${order.address.commune} ${order.address.region}` }}
+                      </div>
+                      <div>{{ order.address.country }}</div>
+                    </div>
+                    <div class="mt-3">
+                      <div class="mb-1 text--primary font-weight-regular">
+                        Items
+                      </div>
+                      <div v-for="item in order.cart" :key="item.id">
+                        {{ `${item.quantity} ${item.name}` }}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="mb-1 text--primary font-weight-regular">
+                      Resumen de la orden
+                    </div>
+
+                    <v-divider class="my-5"></v-divider>
+
+                    <v-row>
+                      <v-col cols="6"> Subtotal </v-col>
+                      <v-col cols="6"> ${{ order.totals.subtotal }} </v-col>
+                      <v-col cols="6"> Envio </v-col>
+                      <v-col cols="6"> ${{ order.totals.shipment }} </v-col>
+                    </v-row>
+
+                    <v-divider class="my-5"></v-divider>
+
+                    <v-row>
+                      <v-col cols="6">
+                        <strong class="text--primary"> Total </strong>
+                      </v-col>
+                      <v-col cols="6">
+                        <strong class="text--primary">
+                          ${{ order.totals.total }}
+                        </strong>
+                      </v-col>
+                    </v-row>
+                  </div>
+                </div>
+              </v-card-text>
+            </v-card>
+          </v-container>
+        </td>
+      </template> -->
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
+        <v-btn color="primary" @click="initialize"> Recargar </v-btn>
       </template>
     </v-data-table>
   </v-container>
 </template>
 
 <script>
-import Menu from "@/components/Admin/Menu";
+import { mapActions, mapGetters } from 'vuex';
+
+import Menu from '@/components/Admin/Menu';
 
 export default {
   components: {
     Menu,
   },
   data: () => ({
-    dialog: false,
-    dialogDelete: false,
     headers: [
       {
-        text: "ID",
-        align: "start",
+        text: 'ID',
+        align: 'start',
         sortable: false,
-        value: "id",
+        value: 'id',
       },
-      { text: "Monto", value: "amount" },
-      { text: "Cliente", value: "name" },
-      { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-    },
-    defaultItem: {
-      name: "",
-    },
   }),
 
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "Nuevo Producto" : "Editar Producto";
-    },
+    ...mapGetters(['getOrders']),
   },
 
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
-  },
-
-  created() {
+  mounted() {
     this.initialize();
   },
 
   methods: {
+    ...mapActions(['fetch_Orders']),
+
     initialize() {
-      this.desserts = [
-        {
-          id: 1,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 2,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 3,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 4,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 5,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 6,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 7,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 8,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 9,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 10,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 11,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 12,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 13,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 14,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 15,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 16,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 17,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 18,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 19,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 20,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 21,
-          name: "John Doe",
-          amount: 147100,
-        },
-        {
-          id: 22,
-          name: "John Doe",
-          amount: 147100,
-        },
-      ];
+      this.fetch_Orders();
     },
 
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+    paymentStatus(order) {
+      if (order.payment) {
+        return 'Pago Autorizado';
       } else {
-        this.desserts.push(this.editedItem);
+        return 'Pago No Autorizado';
       }
-      this.close();
     },
   },
 };
