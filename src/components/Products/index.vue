@@ -1,18 +1,18 @@
 <template>
   <div>
     <v-container>
-      <v-subheader class="pl-0">{{ title }}</v-subheader>
+      <p class="text--subtitle-1 font-weight-medium pl-0">{{ title }}</p>
       <Product :products="products" />
     </v-container>
   </div>
 </template>
 
 <script>
-import Product from "./Product";
+import Product from './Product';
 
 export default {
-  name: "Products",
-  props: ["products", "title"],
+  name: 'Products',
+  props: ['products', 'title'],
   components: {
     Product,
   },
