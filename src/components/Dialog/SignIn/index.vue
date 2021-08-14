@@ -27,15 +27,15 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
+import { mapActions } from 'vuex';
+import { validationMixin } from 'vuelidate';
+import { required, email } from 'vuelidate/lib/validators';
 
 export default {
-  name: "Dialog",
+  name: 'Dialog',
   data: () => ({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   }),
   mixins: [validationMixin],
   validations: {
@@ -48,7 +48,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["sign_In"]),
+    ...mapActions(['sign_In']),
     submit() {
       if (this.$v.email.$invalid || this.$v.password.$invalid) {
         this.$v.email.$touch();
@@ -67,14 +67,14 @@ export default {
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.required && errors.push("El Email es requerido.");
-      !this.$v.email.email && errors.push("El Email es invalido.");
+      !this.$v.email.required && errors.push('El Email es requerido.');
+      !this.$v.email.email && errors.push('El Email es invalido.');
       return errors;
     },
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
-      !this.$v.password.required && errors.push("El Password es requerido.");
+      !this.$v.password.required && errors.push('El Password es requerido.');
       return errors;
     },
   },

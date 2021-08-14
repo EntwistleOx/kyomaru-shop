@@ -1,5 +1,6 @@
 <template>
   <v-dialog v-model="getDialog.state" max-width="600px">
+    {{ getDialog }}
     <v-card>
       <v-tabs v-model="getDialog.tab" grow>
         <v-tab v-for="item in items" :key="item">
@@ -11,12 +12,12 @@
       <v-tabs-items v-model="getDialog.tab">
         <v-tab-item>
           <v-card-text>
-            <Register ref="dialog" />
+            <Register ref="register" />
           </v-card-text>
         </v-tab-item>
         <v-tab-item>
           <v-card-text>
-            <SignIn ref="dialog" />
+            <SignIn ref="login" />
           </v-card-text>
         </v-tab-item>
       </v-tabs-items>
@@ -37,27 +38,30 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
-import SignIn from "./SignIn";
-import Register from "./Register";
+import SignIn from './SignIn';
+import Register from './Register';
 
 export default {
-  name: "Dialog",
+  name: 'Dialog',
   components: {
     SignIn,
     Register,
   },
   data: () => ({
-    items: ["Registrate", "Iniciar Sesion"],
+    items: ['Registrate', 'Iniciar Sesion'],
   }),
   computed: {
-    ...mapGetters(["getDialog"]),
+    ...mapGetters(['getDialog']),
   },
   methods: {
-    ...mapActions(["show_Dialog"]),
     submit() {
-      this.$refs.dialog.submit();
+      if (this.getDialog.tab === 0) {
+        this.$refs.register.submit();
+      } else {
+        this.$refs.login.submit();
+      }
     },
   },
 };

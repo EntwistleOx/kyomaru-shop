@@ -3,7 +3,7 @@
     <Navbar />
     <Drawer />
     <Snackbar />
-    <v-main class="mt-15">
+    <v-main class="mt-14">
       <v-btn
         color="success"
         fab

@@ -2,7 +2,7 @@
   <v-container class="mt-5">
     <v-row>
       <v-col cols="12" sm="6">
-        <v-parallax src="contact.jpg"> </v-parallax>
+        <v-parallax src="contact.jpg" height="550"> </v-parallax>
       </v-col>
       <v-col cols="12" sm="6">
         <h1 class="text-h4 mb-4">Contacto</h1>
