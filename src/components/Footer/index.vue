@@ -20,6 +20,9 @@
 
             <v-col cols="12" sm="3">
               <div class="h6 mb-5">Ayuda</div>
+              <router-link to="/contacto">
+                <p class="body-2">Contacto</p>
+              </router-link>
               <p class="body-2">Preguntas Frecuentes</p>
               <p class="body-2">Terminos y Condiciones</p>
               <p class="body-2">Politicas de Privacidad</p>
@@ -59,15 +62,19 @@
 
 <script>
 export default {
-  name: "Footer",
+  name: 'Footer',
   data: () => ({
-    icons: ["mdi-facebook", "mdi-instagram", "mdi-youtube"],
+    icons: ['mdi-facebook', 'mdi-instagram', 'mdi-youtube'],
   }),
 };
 </script>
 
-<style>
+<style scoped>
 .kyomaru-red {
   background: #fb050d;
+}
+
+.v-application a {
+  color: #ffffff;
 }
 </style>
