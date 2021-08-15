@@ -5,20 +5,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import Search from "@/components/Search";
+import { mapActions, mapGetters } from 'vuex';
+import Search from '@/components/Search';
 
 export default {
-  name: "SearchView",
+  name: 'SearchView',
   components: {
     Search,
   },
   data: () => ({}),
   computed: {
-    ...mapGetters(["getFilteredProducts"]),
+    ...mapGetters(['getFilteredProducts']),
   },
   methods: {
-    ...mapActions(["filterForProducts"]),
+    ...mapActions(['filterForProducts']),
   },
   mounted() {
     const query = this.$route.query.q;

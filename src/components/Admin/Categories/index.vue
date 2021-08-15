@@ -121,11 +121,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { validationMixin } from "vuelidate";
-import { required, requiredIf } from "vuelidate/lib/validators";
+import { mapActions, mapGetters } from 'vuex';
+import { validationMixin } from 'vuelidate';
+import { required, requiredIf } from 'vuelidate/lib/validators';
 
-import Menu from "@/components/Admin/Menu";
+import Menu from '@/components/Admin/Menu';
 
 export default {
   components: {
@@ -133,31 +133,31 @@ export default {
   },
   data: () => ({
     changePhoto: false,
-    photoUrl: "",
-    photoStorage: "",
+    photoUrl: '',
+    photoStorage: '',
     disable: true,
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: "Nombre",
-        align: "start",
+        text: 'Nombre',
+        align: 'start',
         sortable: false,
-        value: "name",
+        value: 'name',
       },
       {
-        text: "Foto",
-        value: "photo",
+        text: 'Foto',
+        value: 'photo',
       },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
     editedIndex: null,
     editedItem: {
-      name: "",
+      name: '',
       photo: null,
     },
     defaultItem: {
-      name: "",
+      name: '',
       photo: null,
     },
   }),
@@ -183,16 +183,16 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getCategories"]),
+    ...mapGetters(['getCategories']),
 
     formTitle() {
-      return !this.editedIndex ? "Nueva Categoria" : "Editar Categoria";
+      return !this.editedIndex ? 'Nueva Categoria' : 'Editar Categoria';
     },
 
     nameErrors() {
       let errors = [];
       if (!this.$v.editedItem.name.$dirty) return errors;
-      !this.$v.editedItem.name.required && errors.push("Nombre es requerido.");
+      !this.$v.editedItem.name.required && errors.push('Nombre es requerido.');
       return errors;
     },
 
@@ -200,7 +200,7 @@ export default {
       let errors = [];
       if (!this.$v.editedItem.photo.$dirty) return errors;
       !this.$v.editedItem.photo.required &&
-        errors.push("La Imagen es requerida.");
+        errors.push('La Imagen es requerida.');
       return errors;
     },
   },
@@ -220,10 +220,10 @@ export default {
 
   methods: {
     ...mapActions([
-      "fetch_Categories",
-      "delete_Category",
-      "update_Category",
-      "add_Category",
+      'fetch_Categories',
+      'delete_Category',
+      'update_Category',
+      'add_Category',
     ]),
 
     initialize() {

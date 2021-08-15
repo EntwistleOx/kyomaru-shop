@@ -91,10 +91,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { formatCurrency } from "@/utils";
+import { mapActions, mapGetters } from 'vuex';
+import { formatCurrency } from '@/utils';
 
-import Menu from "@/components/Admin/Menu";
+import Menu from '@/components/Admin/Menu';
 
 export default {
   components: {
@@ -103,32 +103,32 @@ export default {
   data: () => ({
     headers: [
       {
-        text: "Nombre",
-        align: "start",
+        text: 'Nombre',
+        align: 'start',
         sortable: false,
-        value: "name",
+        value: 'name',
       },
       {
-        text: "Apellido",
-        value: "lastName",
+        text: 'Apellido',
+        value: 'lastName',
       },
       {
-        text: "RUT",
-        value: "rut",
+        text: 'RUT',
+        value: 'rut',
       },
       {
-        text: "Email",
-        value: "email",
+        text: 'Email',
+        value: 'email',
       },
       {
-        text: "Fono",
-        value: "phone",
+        text: 'Fono',
+        value: 'phone',
       },
     ],
   }),
 
   computed: {
-    ...mapGetters(["getUsers"]),
+    ...mapGetters(['getUsers']),
   },
 
   mounted() {
@@ -136,7 +136,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["fetch_Users"]),
+    ...mapActions(['fetch_Users']),
 
     initialize() {
       this.fetch_Users();
@@ -144,9 +144,9 @@ export default {
 
     paymentStatus(order) {
       if (order.payment) {
-        return "Pago Autorizado";
+        return 'Pago Autorizado';
       } else {
-        return "Pago No Autorizado";
+        return 'Pago No Autorizado';
       }
     },
 

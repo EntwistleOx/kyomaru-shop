@@ -89,20 +89,20 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { formatCurrency } from "@/utils";
+import { mapGetters, mapActions } from 'vuex';
+import { formatCurrency } from '@/utils';
 
 export default {
-  name: "Cart",
+  name: 'Cart',
   data: () => ({}),
   computed: {
-    ...mapGetters(["getCart", "getSubTotal"]),
+    ...mapGetters(['getCart', 'getSubTotal']),
   },
   methods: {
     ...mapActions([
-      "add_Item_Quantity",
-      "substract_Item_Quantity",
-      "delete_Item_From_Cart",
+      'add_Item_Quantity',
+      'substract_Item_Quantity',
+      'delete_Item_From_Cart',
     ]),
     add(id) {
       this.add_Item_Quantity(id);

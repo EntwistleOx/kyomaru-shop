@@ -100,31 +100,31 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "MyOrdersView",
+  name: 'MyOrdersView',
   data: () => ({
     headers: [
       {
-        text: "ID",
-        align: "start",
+        text: 'ID',
+        align: 'start',
         sortable: false,
-        value: "id",
+        value: 'id',
       },
       {
-        text: "Fecha",
-        value: "createdAt",
+        text: 'Fecha',
+        value: 'createdAt',
       },
       {
-        text: "Total",
-        value: "totals.total",
+        text: 'Total',
+        value: 'totals.total',
       },
     ],
   }),
 
   computed: {
-    ...mapGetters(["getMyOrders", "getUser"]),
+    ...mapGetters(['getMyOrders', 'getUser']),
   },
 
   methods: {
@@ -136,9 +136,9 @@ export default {
 
     paymentStatus(order) {
       if (order.payment) {
-        return "Pago Autorizado";
+        return 'Pago Autorizado';
       } else {
-        return "Pago No Autorizado";
+        return 'Pago No Autorizado';
       }
     },
   },

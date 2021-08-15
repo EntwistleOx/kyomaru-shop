@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import { formatCurrency } from "@/utils";
+import { formatCurrency } from '@/utils';
 
 export default {
-  name: "Product",
-  props: ["products"],
+  name: 'Product',
+  props: ['products'],
   data: () => ({}),
   methods: {
     formatPrice(number) {

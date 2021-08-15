@@ -57,21 +57,21 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data: () => ({
     group: null,
   }),
   methods: {
-    ...mapActions(["show_Drawer", "show_Dialog", "sign_Out"]),
+    ...mapActions(['show_Drawer', 'show_Dialog', 'sign_Out']),
 
     openDialog(tabIndex) {
       this.show_Dialog({ state: true, tab: tabIndex });
     },
   },
   computed: {
-    ...mapGetters(["getUser", "getDrawer", "getCategories"]),
+    ...mapGetters(['getUser', 'getDrawer', 'getCategories']),
     drawer: {
       get: function () {
         return this.getDrawer;

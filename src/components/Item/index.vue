@@ -75,27 +75,27 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { formatCurrency } from "@/utils";
+import { mapGetters, mapActions } from 'vuex';
+import { formatCurrency } from '@/utils';
 
 export default {
   data: () => ({
     item: {
-      id: "",
-      name: "",
-      description: "",
-      photo: "",
-      price: "",
+      id: '',
+      name: '',
+      description: '',
+      photo: '',
+      price: '',
       stock: 0,
       quantity: 1,
     },
     items: [],
   }),
   computed: {
-    ...mapGetters(["getUser", "getItem"]),
+    ...mapGetters(['getUser', 'getItem']),
   },
   methods: {
-    ...mapActions(["add_To_Cart"]),
+    ...mapActions(['add_To_Cart']),
     add() {
       this.item.quantity >= 10 ? this.item.quantity : this.item.quantity++;
     },
@@ -119,9 +119,9 @@ export default {
     this.item.stock = result.stock;
     this.items = [
       {
-        text: "Inicio",
+        text: 'Inicio',
         disabled: false,
-        href: "/",
+        href: '/',
       },
       {
         text: result.categories[0],
@@ -131,7 +131,7 @@ export default {
       {
         text: result.name,
         disabled: true,
-        href: "",
+        href: '',
       },
     ];
   },

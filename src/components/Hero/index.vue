@@ -27,11 +27,11 @@
 <script>
 export default {
   data: () => ({
-    query: "",
+    query: '',
   }),
   methods: {
     search() {
-      this.$router.replace({ name: "Search", query: { q: this.query } });
+      this.$router.replace({ name: 'Search', query: { q: this.query } });
     },
   },
 };

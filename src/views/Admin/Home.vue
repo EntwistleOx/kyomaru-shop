@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import Home from "@/components/Admin/Home";
+import Home from '@/components/Admin/Home';
 
 export default {
-  name: "AdminHome",
+  name: 'AdminHome',
   components: {
     Home,
   },

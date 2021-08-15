@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import Menu from "@/components/Admin/Menu";
+import Menu from '@/components/Admin/Menu';
 
 export default {
   components: {

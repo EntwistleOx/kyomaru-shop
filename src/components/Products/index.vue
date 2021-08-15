@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import Product from "./Product";
+import Product from './Product';
 
 export default {
-  name: "Products",
-  props: ["products", "title"],
+  name: 'Products',
+  props: ['products', 'title'],
   components: {
     Product,
   },

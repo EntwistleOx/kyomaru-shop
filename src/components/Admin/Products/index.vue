@@ -232,12 +232,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { validationMixin } from "vuelidate";
-import { required, requiredIf, minValue } from "vuelidate/lib/validators";
-import { formatCurrency } from "@/utils";
+import { mapActions, mapGetters } from 'vuex';
+import { validationMixin } from 'vuelidate';
+import { required, requiredIf, minValue } from 'vuelidate/lib/validators';
+import { formatCurrency } from '@/utils';
 
-import Menu from "@/components/Admin/Menu";
+import Menu from '@/components/Admin/Menu';
 
 export default {
   components: {
@@ -245,79 +245,79 @@ export default {
   },
   data: () => ({
     changePhoto: false,
-    photoUrl: "",
-    photoStorage: "",
+    photoUrl: '',
+    photoStorage: '',
     disable: true,
     dialog: false,
     dialogDelete: false,
     headers: [
       {
-        text: "Nombre",
-        align: "start",
+        text: 'Nombre',
+        align: 'start',
         sortable: false,
-        value: "name",
+        value: 'name',
       },
       {
-        text: "Estado",
-        value: "state",
+        text: 'Estado',
+        value: 'state',
       },
       {
-        text: "Stock",
-        value: "stock",
+        text: 'Stock',
+        value: 'stock',
       },
       {
-        text: "Descripcion",
-        value: "description",
+        text: 'Descripcion',
+        value: 'description',
       },
       {
-        text: "Precio",
-        value: "price",
+        text: 'Precio',
+        value: 'price',
       },
       {
-        text: "Categorias",
-        value: "categories",
+        text: 'Categorias',
+        value: 'categories',
       },
       {
-        text: "Dimensiones",
-        value: "dimensions",
+        text: 'Dimensiones',
+        value: 'dimensions',
       },
       {
-        text: "Peso",
-        value: "weight",
+        text: 'Peso',
+        value: 'weight',
       },
       {
-        text: "Foto",
-        value: "photo",
+        text: 'Foto',
+        value: 'photo',
       },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: 'Actions', value: 'actions', sortable: false },
     ],
     editedIndex: null,
     editedItem: {
-      name: "",
+      name: '',
       state: false,
       stock: 0,
-      description: "",
-      price: "",
+      description: '',
+      price: '',
       categories: [],
       dimensions: {
-        height: "",
-        width: "",
+        height: '',
+        width: '',
       },
-      weight: "",
+      weight: '',
       photo: null,
     },
     defaultItem: {
-      name: "",
+      name: '',
       state: false,
       stock: 0,
-      description: "",
-      price: "",
+      description: '',
+      price: '',
       categories: [],
       dimensions: {
-        height: "",
-        width: "",
+        height: '',
+        width: '',
       },
-      weight: "",
+      weight: '',
       photo: null,
     },
   }),
@@ -353,36 +353,36 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getProducts", "getCategories"]),
+    ...mapGetters(['getProducts', 'getCategories']),
 
     categories() {
       return this.getCategories.map((cat) => cat.name);
     },
 
     formTitle() {
-      return !this.editedIndex ? "Nuevo Producto" : "Editar Producto";
+      return !this.editedIndex ? 'Nuevo Producto' : 'Editar Producto';
     },
 
     nameErrors() {
       let errors = [];
       if (!this.$v.editedItem.name.$dirty) return errors;
-      !this.$v.editedItem.name.required && errors.push("Nombre es requerido.");
+      !this.$v.editedItem.name.required && errors.push('Nombre es requerido.');
       return errors;
     },
 
     stateErrors() {
       let errors = [];
       if (!this.$v.editedItem.state.$dirty) return errors;
-      !this.$v.editedItem.state.required && errors.push("Estado es requerido.");
+      !this.$v.editedItem.state.required && errors.push('Estado es requerido.');
       return errors;
     },
 
     stockErrors() {
       let errors = [];
       if (!this.$v.editedItem.stock.$dirty) return errors;
-      !this.$v.editedItem.stock.required && errors.push("Stock es requerido.");
+      !this.$v.editedItem.stock.required && errors.push('Stock es requerido.');
       !this.$v.editedItem.stock.minValue &&
-        errors.push("Stock debe ser mayor o igual a 0.");
+        errors.push('Stock debe ser mayor o igual a 0.');
       return errors;
     },
 
@@ -390,14 +390,14 @@ export default {
       let errors = [];
       if (!this.$v.editedItem.description.$dirty) return errors;
       !this.$v.editedItem.description.required &&
-        errors.push("Descripcion es requerida.");
+        errors.push('Descripcion es requerida.');
       return errors;
     },
 
     priceErrors() {
       let errors = [];
       if (!this.$v.editedItem.price.$dirty) return errors;
-      !this.$v.editedItem.price.required && errors.push("Precio es requerido.");
+      !this.$v.editedItem.price.required && errors.push('Precio es requerido.');
       return errors;
     },
 
@@ -405,7 +405,7 @@ export default {
       let errors = [];
       if (!this.$v.editedItem.categories.$dirty) return errors;
       !this.$v.editedItem.categories.required &&
-        errors.push("Categorias es requerido.");
+        errors.push('Categorias es requerido.');
       return errors;
     },
 
@@ -413,7 +413,7 @@ export default {
       let errors = [];
       if (!this.$v.editedItem.dimensions.height.$dirty) return errors;
       !this.$v.editedItem.dimensions.height.required &&
-        errors.push("Altura es requerida.");
+        errors.push('Altura es requerida.');
       return errors;
     },
 
@@ -421,14 +421,14 @@ export default {
       let errors = [];
       if (!this.$v.editedItem.dimensions.width.$dirty) return errors;
       !this.$v.editedItem.dimensions.width.required &&
-        errors.push("Anchura es requerida.");
+        errors.push('Anchura es requerida.');
       return errors;
     },
 
     weightErrors() {
       let errors = [];
       if (!this.$v.editedItem.weight.$dirty) return errors;
-      !this.$v.editedItem.weight.required && errors.push("Peso es requerida.");
+      !this.$v.editedItem.weight.required && errors.push('Peso es requerida.');
       return errors;
     },
 
@@ -436,7 +436,7 @@ export default {
       let errors = [];
       if (!this.$v.editedItem.photo.$dirty) return errors;
       !this.$v.editedItem.photo.required &&
-        errors.push("La Imagen es requerida.");
+        errors.push('La Imagen es requerida.');
       return errors;
     },
   },
@@ -456,11 +456,11 @@ export default {
 
   methods: {
     ...mapActions([
-      "fetch_Products",
-      "fetch_Categories",
-      "delete_Product",
-      "update_Product",
-      "add_Product",
+      'fetch_Products',
+      'fetch_Categories',
+      'delete_Product',
+      'update_Product',
+      'add_Product',
     ]),
 
     initialize() {

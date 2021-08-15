@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import Products from "@/components/Admin/Products";
+import Products from '@/components/Admin/Products';
 
 export default {
-  name: "AdminProducts",
+  name: 'AdminProducts',
   components: {
     Products,
   },

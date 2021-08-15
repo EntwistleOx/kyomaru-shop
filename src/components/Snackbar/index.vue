@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(["snackbar"]),
+    ...mapGetters(['snackbar']),
     show: {
       get() {
         return this.snackbar.show;
@@ -19,8 +19,8 @@ export default {
       set(newShow) {
         const snack = {
           show: newShow,
-          text: "",
-          color: "",
+          text: '',
+          color: '',
         };
         this.show_Snack(snack);
       },
@@ -33,7 +33,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["show_Snack"]),
+    ...mapActions(['show_Snack']),
   },
 };
 </script>

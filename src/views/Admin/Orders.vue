@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import Orders from "@/components/Admin/Orders";
+import Orders from '@/components/Admin/Orders';
 
 export default {
-  name: "AdminOrders",
+  name: 'AdminOrders',
   components: {
     Orders,
   },

@@ -136,11 +136,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import Dialog from "@/components/Dialog";
+import { mapActions, mapGetters } from 'vuex';
+import Dialog from '@/components/Dialog';
 
 export default {
-  name: "Navbar",
+  name: 'Navbar',
   components: {
     Dialog,
   },
@@ -149,14 +149,14 @@ export default {
     menu: false,
     message: false,
     hints: true,
-    query: "",
+    query: '',
   }),
   methods: {
     ...mapActions([
-      "show_Dialog",
-      "sign_Out",
-      "show_Drawer",
-      "filterForProducts",
+      'show_Dialog',
+      'sign_Out',
+      'show_Drawer',
+      'filterForProducts',
     ]),
     openDialog(tabIndex) {
       this.show_Dialog({ state: true, tab: tabIndex });
@@ -169,7 +169,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getUser", "getTotalCountInCart", "getDrawer"]),
+    ...mapGetters(['getUser', 'getTotalCountInCart', 'getDrawer']),
     name() {
       return `${this.getUser.name} ${this.getUser.lastName}`;
     },
@@ -178,10 +178,10 @@ export default {
     },
     avatar() {
       return this.getUser.name
-        ? `${this.getUser.name.split("")[0]}${
-            this.getUser.lastName.split("")[0]
+        ? `${this.getUser.name.split('')[0]}${
+            this.getUser.lastName.split('')[0]
           }`
-        : "";
+        : '';
     },
   },
 };

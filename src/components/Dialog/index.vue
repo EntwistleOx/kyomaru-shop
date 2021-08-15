@@ -37,22 +37,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
-import SignIn from "./SignIn";
-import Register from "./Register";
+import SignIn from './SignIn';
+import Register from './Register';
 
 export default {
-  name: "Dialog",
+  name: 'Dialog',
   components: {
     SignIn,
     Register,
   },
   data: () => ({
-    items: ["Registrate", "Iniciar Sesion"],
+    items: ['Registrate', 'Iniciar Sesion'],
   }),
   computed: {
-    ...mapGetters(["getDialog"]),
+    ...mapGetters(['getDialog']),
   },
   methods: {
     submit() {

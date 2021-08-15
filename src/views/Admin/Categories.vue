@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import Categories from "@/components/Admin/Categories";
+import Categories from '@/components/Admin/Categories';
 
 export default {
-  name: "AdminCategories",
+  name: 'AdminCategories',
   components: {
     Categories,
   },
