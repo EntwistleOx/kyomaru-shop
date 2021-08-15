@@ -93,6 +93,9 @@ export default {
   data() {
     return {};
   },
+  created() {
+    this.show_Overlay(true);
+  },
   mounted() {
     this.setData();
   },
@@ -100,7 +103,7 @@ export default {
     ...mapGetters(['getOrder']),
   },
   methods: {
-    ...mapActions(['get_Order']),
+    ...mapActions(['get_Order', 'show_Overlay']),
     setData() {
       this.get_Order({ userId: this.userId, orderId: this.orderId });
     },

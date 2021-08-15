@@ -21,11 +21,17 @@
     </v-main>
 
     <Footer />
+    <v-overlay :value="getOverlay" opacity="1" color="#fff">
+      <v-img
+        class="animate-flicker"
+        src="https://cdn.shopify.com/s/files/1/0457/8174/5831/files/KyoMaru_LOGO_2021_WEB_360x.jpg?v=1614575281"
+      ></v-img>
+    </v-overlay>
   </v-app>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 // Components
 import Navbar from '@/components/Navbar';
@@ -41,14 +47,17 @@ export default {
     Drawer,
     Snackbar,
   },
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
   mounted() {
     this.auth_State_Change();
+    this.fetch_Categories();
+    this.fetch_Products();
   },
   methods: {
-    ...mapActions(['auth_State_Change']),
+    ...mapActions(['auth_State_Change', 'fetch_Categories', 'fetch_Products']),
+  },
+  computed: {
+    ...mapGetters(['getOverlay']),
   },
 };
 </script>
@@ -62,5 +71,56 @@ html {
   bottom: 0;
   position: fixed;
   margin: 0 -4px 40px 0;
+}
+
+@keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.animate-flicker {
+  -webkit-animation: flickerAnimation 1.3s infinite;
+  -moz-animation: flickerAnimation 1.3s infinite;
+  -o-animation: flickerAnimation 1.3s infinite;
+  animation: flickerAnimation 1.3s infinite;
 }
 </style>

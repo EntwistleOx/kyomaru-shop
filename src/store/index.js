@@ -25,6 +25,7 @@ export default new Vuex.Store({
     dialog: { state: false, tab: null },
     order: {},
     orders: [],
+    overlay: true,
   },
   mutations: {
     SET_USER(state, user) {
@@ -45,7 +46,6 @@ export default new Vuex.Store({
       } else {
         state.cart.push(product);
       }
-      console.log('Producto agregado al carrito!');
     },
     UPDATE_CART_QUANTITY(state, updatedCart) {
       state.cart = updatedCart;
@@ -59,6 +59,9 @@ export default new Vuex.Store({
     },
     SHOW_SNACK(state, snack) {
       state.snack = snack;
+    },
+    SHOW_OVERLAY(state, overlay) {
+      state.overlay = overlay;
     },
     SHOW_DIALOG(state, dialog) {
       state.dialog = dialog;
@@ -89,6 +92,9 @@ export default new Vuex.Store({
     },
     show_Dialog({ commit }, dialog) {
       commit('SHOW_DIALOG', dialog);
+    },
+    show_Overlay({ commit }, overlay) {
+      commit('SHOW_OVERLAY', overlay);
     },
     // AUTH
     register({ commit }, { name, lastName, rut, phone, email, password }) {
@@ -163,6 +169,7 @@ export default new Vuex.Store({
         .signOut()
         .then(() => {
           commit('CLEAR_CART');
+          commit('SET_ORDER', {});
         })
         .catch((error) => {
           const snack = {
@@ -234,6 +241,12 @@ export default new Vuex.Store({
       const product = state.products.find((product) => product.id === id);
       product.quantity = quantity;
       commit('ADD_TO_CART', product);
+      const snack = {
+        show: true,
+        text: 'Producto agregado al carrito.',
+        color: 'success',
+      };
+      commit('SHOW_SNACK', snack);
     },
     add_Item_Quantity({ commit, state }, id) {
       const index = state.cart.findIndex((item) => item.id === id);
@@ -317,6 +330,7 @@ export default new Vuex.Store({
                 paymentStatus: payment.status,
               };
               commit('SET_ORDER', order);
+              commit('SHOW_OVERLAY', false);
             })
             .catch((error) => {
               console.log(error);
@@ -326,6 +340,7 @@ export default new Vuex.Store({
                 color: 'error',
               };
               commit('SHOW_SNACK', snack);
+              commit('SHOW_OVERLAY', false);
             });
         })
         .catch((error) => {
@@ -489,6 +504,7 @@ export default new Vuex.Store({
           });
           commit('SET_PRODUCTS', products);
           commit('SET_FILTERED_PRODUCTS', products);
+          commit('SHOW_OVERLAY', false);
         });
     },
     add_Product({ commit }, product) {
@@ -707,6 +723,9 @@ export default new Vuex.Store({
     },
     getDrawer: ({ drawer }) => {
       return drawer;
+    },
+    getOverlay: ({ overlay }) => {
+      return overlay;
     },
     getUser: ({ user }) => {
       return user;

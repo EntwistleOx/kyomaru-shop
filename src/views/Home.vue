@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 import Hero from '@/components/Hero';
 import Products from '@/components/Products';
@@ -21,17 +21,6 @@ export default {
     Categories,
   },
   data: () => ({}),
-  mounted() {
-    this.initialize();
-  },
-
-  methods: {
-    ...mapActions(['fetch_Categories', 'fetch_Products']),
-    initialize() {
-      this.fetch_Categories();
-      this.fetch_Products();
-    },
-  },
   computed: {
     ...mapGetters(['getFilteredProducts']),
   },

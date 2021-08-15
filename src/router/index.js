@@ -144,6 +144,9 @@ router.beforeEach((to, from, next) => {
   setTimeout(() => {
     window.scrollTo(0, 0);
   }, 300);
+  if (to.name === 'PostTransaction') {
+    next();
+  }
   firebase.auth().onAuthStateChanged((user) => {
     let adminRequired = to.matched.some((route) => route.meta.admin);
     let authRequired = to.matched.some((route) => route.meta.auth);
