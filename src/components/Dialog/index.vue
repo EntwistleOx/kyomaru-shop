@@ -1,6 +1,5 @@
 <template>
   <v-dialog v-model="getDialog.state" max-width="600px">
-    {{ getDialog }}
     <v-card>
       <v-tabs v-model="getDialog.tab" grow>
         <v-tab v-for="item in items" :key="item">
@@ -38,22 +37,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
-import SignIn from './SignIn';
-import Register from './Register';
+import SignIn from "./SignIn";
+import Register from "./Register";
 
 export default {
-  name: 'Dialog',
+  name: "Dialog",
   components: {
     SignIn,
     Register,
   },
   data: () => ({
-    items: ['Registrate', 'Iniciar Sesion'],
+    items: ["Registrate", "Iniciar Sesion"],
   }),
   computed: {
-    ...mapGetters(['getDialog']),
+    ...mapGetters(["getDialog"]),
   },
   methods: {
     submit() {

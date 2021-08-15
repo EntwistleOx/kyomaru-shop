@@ -82,22 +82,22 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate';
+import { validationMixin } from "vuelidate";
 import {
   required,
   email,
   minLength,
   maxLength,
   numeric,
-} from 'vuelidate/lib/validators';
+} from "vuelidate/lib/validators";
 
 export default {
   data() {
     return {
-      name: '',
-      email: '',
-      phone: '',
-      msg: '',
+      name: "",
+      email: "",
+      phone: "",
+      msg: "",
       show: false,
     };
   },
@@ -124,32 +124,32 @@ export default {
     nameErrors() {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
-      !this.$v.name.required && errors.push('El Nombre es requerido.');
+      !this.$v.name.required && errors.push("El Nombre es requerido.");
       return errors;
     },
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.required && errors.push('El Email es requerido.');
-      !this.$v.email.email && errors.push('El Email es invalido.');
+      !this.$v.email.required && errors.push("El Email es requerido.");
+      !this.$v.email.email && errors.push("El Email es invalido.");
       return errors;
     },
     phoneErrors() {
       const errors = [];
       if (!this.$v.phone.$dirty) return errors;
-      !this.$v.phone.required && errors.push('El Telefono es requerido.');
+      !this.$v.phone.required && errors.push("El Telefono es requerido.");
       !this.$v.phone.numeric &&
-        errors.push('El Telefono debe ser de valor numerico.');
+        errors.push("El Telefono debe ser de valor numerico.");
       !this.$v.phone.minLength &&
-        errors.push('El largo minimo del Telefono es 11 caracteres.');
+        errors.push("El largo minimo del Telefono es 11 caracteres.");
       !this.$v.phone.maxLength &&
-        errors.push('El largo maximo del Telefono es 11 caracteres.');
+        errors.push("El largo maximo del Telefono es 11 caracteres.");
       return errors;
     },
     msgErrors() {
       const errors = [];
       if (!this.$v.msg.$dirty) return errors;
-      !this.$v.msg.required && errors.push('El Envio es requerido.');
+      !this.$v.msg.required && errors.push("El Envio es requerido.");
       return errors;
     },
   },
@@ -173,10 +173,10 @@ export default {
           phone: this.phone,
           msg: this.msg,
         };
-        const result = await fetch('http://localhost:5000/api/v1/contact', {
-          method: 'POST',
+        const result = await fetch("http://localhost:5000/api/v1/contact", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
         });

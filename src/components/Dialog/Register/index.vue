@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { validationMixin } from 'vuelidate';
+import { mapActions } from "vuex";
+import { validationMixin } from "vuelidate";
 import {
   required,
   email,
@@ -89,21 +89,21 @@ import {
   maxLength,
   numeric,
   sameAs,
-} from 'vuelidate/lib/validators';
-import { validate } from 'rut.js';
+} from "vuelidate/lib/validators";
+import { validate } from "rut.js";
 
 const validateRut = (value) => validate(value);
 
 export default {
-  name: 'Dialog',
+  name: "Dialog",
   data: () => ({
-    name: '',
-    lastName: '',
-    rut: '',
-    phone: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    lastName: "",
+    rut: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   }),
   mixins: [validationMixin],
   validations: {
@@ -133,11 +133,11 @@ export default {
     },
     confirmPassword: {
       required,
-      sameAs: sameAs('password'),
+      sameAs: sameAs("password"),
     },
   },
   methods: {
-    ...mapActions(['register']),
+    ...mapActions(["register"]),
     submit() {
       if (
         this.$v.name.$invalid ||
@@ -173,56 +173,56 @@ export default {
     nameErrors() {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
-      !this.$v.name.required && errors.push('El Nombre es requerido.');
+      !this.$v.name.required && errors.push("El Nombre es requerido.");
       return errors;
     },
     lastNameErrors() {
       const errors = [];
       if (!this.$v.lastName.$dirty) return errors;
-      !this.$v.lastName.required && errors.push('El Apellido es requerido.');
+      !this.$v.lastName.required && errors.push("El Apellido es requerido.");
       return errors;
     },
     rutErrors() {
       const errors = [];
       if (!this.$v.rut.$dirty) return errors;
-      !this.$v.rut.required && errors.push('El RUT es requerido.');
-      !this.$v.rut.validateRut && errors.push('El RUT es invalido.');
+      !this.$v.rut.required && errors.push("El RUT es requerido.");
+      !this.$v.rut.validateRut && errors.push("El RUT es invalido.");
       return errors;
     },
     phoneErrors() {
       const errors = [];
       if (!this.$v.phone.$dirty) return errors;
-      !this.$v.phone.required && errors.push('El Telefono es requerido.');
+      !this.$v.phone.required && errors.push("El Telefono es requerido.");
       !this.$v.phone.numeric &&
-        errors.push('El Telefono debe ser de valor numerico.');
+        errors.push("El Telefono debe ser de valor numerico.");
       !this.$v.phone.minLength &&
-        errors.push('El largo minimo del Telefono es 11 caracteres.');
+        errors.push("El largo minimo del Telefono es 11 caracteres.");
       !this.$v.phone.maxLength &&
-        errors.push('El largo maximo del Telefono es 11 caracteres.');
+        errors.push("El largo maximo del Telefono es 11 caracteres.");
       return errors;
     },
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.required && errors.push('El Email es requerido.');
-      !this.$v.email.email && errors.push('El Email es invalido.');
+      !this.$v.email.required && errors.push("El Email es requerido.");
+      !this.$v.email.email && errors.push("El Email es invalido.");
       return errors;
     },
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
-      !this.$v.password.required && errors.push('El Password es requerido.');
+      !this.$v.password.required && errors.push("El Password es requerido.");
       !this.$v.password.minLength &&
-        errors.push('El largo minimo del Password es 6 caracteres.');
+        errors.push("El largo minimo del Password es 6 caracteres.");
       return errors;
     },
     confirmPasswordErrors() {
       const errors = [];
       if (!this.$v.confirmPassword.$dirty) return errors;
       !this.$v.confirmPassword.required &&
-        errors.push('El campo es requerido.');
+        errors.push("El campo es requerido.");
       !this.$v.confirmPassword.sameAs &&
-        errors.push('Debe coincidir con el campo Password.');
+        errors.push("Debe coincidir con el campo Password.");
       return errors;
     },
   },
